@@ -27,9 +27,9 @@
         <div>
           <div class="flex items-center gap-2">
             <h1 class="text-lg font-bold tracking-tight text-white">Chpa Manager</h1>
-            <span class="text-[10px] bg-stone-800 text-amber-300 font-semibold px-2 py-0.5 rounded-full border border-stone-700">v2.3 • Cero Pérdidas</span>
+            <span class="text-[10px] bg-stone-800 text-amber-300 font-semibold px-2 py-0.5 rounded-full border border-stone-700">v2.4 • Delivery Incluido</span>
           </div>
-          <p class="text-xs text-stone-400">Pote 500g & Pote 1 KG • Costos Reales & Rentabilidad Garantizada</p>
+          <p class="text-xs text-stone-400">Precios Finales al Cliente • Ganancia Mínima de $1 a $2 Asegurada</p>
         </div>
       </div>
       
@@ -65,15 +65,15 @@
       </div>
 
       <div class="bg-white p-4 rounded-xl shadow-sm border border-stone-200/80">
-        <div class="text-xs font-medium text-stone-500 uppercase tracking-wider">Masa Vendida</div>
-        <div class="text-2xl font-bold text-stone-800 mt-1" id="kpi-delivered-potes">0 Kg</div>
-        <div class="text-xs text-stone-400 mt-0.5" id="kpi-delivered-sub">Total acumulado</div>
+        <div class="text-xs font-medium text-stone-500 uppercase tracking-wider">Pedidos Realizados</div>
+        <div class="text-2xl font-bold text-stone-800 mt-1" id="kpi-delivered-potes">0</div>
+        <div class="text-xs text-stone-400 mt-0.5">Historial acumulado</div>
       </div>
 
       <div class="bg-white p-4 rounded-xl shadow-sm border border-stone-200/80">
-        <div class="text-xs font-medium text-stone-500 uppercase tracking-wider">Costo Pote 1 KG</div>
-        <div class="text-2xl font-bold text-stone-800 mt-1" id="kpi-cost-pote">$3.74</div>
-        <div class="text-xs text-emerald-600 font-semibold mt-0.5">Pote 500g = $2.01</div>
+        <div class="text-xs font-medium text-stone-500 uppercase tracking-wider">Ganancia por Pote</div>
+        <div class="text-2xl font-bold text-emerald-700 mt-1" id="kpi-profit-unit">+$1.00 a $2.00</div>
+        <div class="text-xs text-emerald-600 font-semibold mt-0.5">Meta asegurada ✅</div>
       </div>
 
       <div class="bg-white p-4 rounded-xl shadow-sm border border-stone-200/80 col-span-2 lg:col-span-1">
@@ -89,10 +89,10 @@
         💰 Ventas & Cobranzas
       </button>
       <button onclick="switchTab('combos')" id="tab-btn-combos" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold transition bg-white text-stone-600 hover:bg-stone-50 border border-stone-200">
-        ⭐ Precios Oficiales & Mensajes
+        ⭐ Precios (Delivery Incluido)
       </button>
       <button onclick="switchTab('costos')" id="tab-btn-costos" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold transition bg-white text-stone-600 hover:bg-stone-50 border border-stone-200">
-        ⚖️ Estructura de Costos 500g & 1Kg
+        ⚖️ Costos con 18 Potes/Saco
       </button>
       <button onclick="switchTab('produccion')" id="tab-btn-produccion" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold transition bg-white text-stone-600 hover:bg-stone-50 border border-stone-200">
         🌽 Lotes & Molienda
@@ -111,9 +111,9 @@
       <!-- Formulario de Venta -->
       <div class="bg-white p-5 rounded-xl shadow-sm border border-stone-200">
         <h2 class="text-sm font-bold text-stone-800 mb-3 flex items-center gap-2">
-          <span>➕</span> Registrar Pedido de Cliente
+          <span>➕</span> Registrar Venta con Precio Final al Cliente
         </h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-3">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
           <div>
             <label class="block text-xs font-semibold text-stone-600 mb-1">Cliente</label>
             <input id="sale-client" type="text" placeholder="Ej: Carolina" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:border-stone-600 outline-none">
@@ -123,35 +123,23 @@
             <input id="sale-phone" type="text" placeholder="0412..." class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:border-stone-600 outline-none">
           </div>
           <div>
-            <label class="block text-xs font-semibold text-stone-600 mb-1">Producto / Presentación</label>
+            <label class="block text-xs font-semibold text-stone-600 mb-1">Precio Anunciado (Con Delivery)</label>
             <select id="sale-combo-select" class="w-full border border-stone-300 rounded-lg px-2 py-2 text-xs focus:border-stone-600 outline-none font-semibold text-stone-800" onchange="applyProductSelection()">
-              <option value="pote_500g">1 Pote 500g - $3.00</option>
-              <option value="pote_1kg" selected>1 Pote 1 KG - $5.00</option>
-              <option value="combo_2kg">Combo 2 KG (2 Potes 1Kg) - $11.00</option>
-              <option value="combo_3kg">Combo 3 KG (3 Potes 1Kg) - $16.00</option>
-              <option value="custom">Personalizado...</option>
-            </select>
-          </div>
-          <div id="custom-qty-container" class="hidden">
-            <label class="block text-xs font-semibold text-stone-600 mb-1">Kilos o Potes</label>
-            <input id="sale-qty" type="number" min="1" value="1" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:border-stone-600 outline-none" oninput="calculateCustomSale()">
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-stone-600 mb-1">Forma de Entrega</label>
-            <select id="sale-delivery-type" class="w-full border border-stone-300 rounded-lg px-2 py-2 text-xs focus:border-stone-600 outline-none" onchange="recalculateSaleTotal()">
-              <option value="pickup">🏠 Retiro en tu Casa ($0)</option>
-              <option value="delivery_close">🛵 Delivery Cercano (+$1.50)</option>
-              <option value="delivery_far">🛵 Delivery Lejano (+$2.50)</option>
-              <option value="delivery_free">🎁 Delivery Gratis Promo</option>
+              <option value="pote_1kg_deliv" selected>Pote 1 KG con Delivery: $6.50</option>
+              <option value="pote_500g_deliv">Pote 500g con Delivery: $4.50</option>
+              <option value="combo_2kg_deliv">Combo 2 KG con Delivery: $11.00</option>
+              <option value="pote_1kg_pickup">Pote 1 KG (Retiro en Casa): $5.00</option>
+              <option value="pote_500g_pickup">Pote 500g (Retiro en Casa): $3.00</option>
+              <option value="custom">Otro Monto...</option>
             </select>
           </div>
           <div>
-            <label class="block text-xs font-semibold text-stone-600 mb-1">Total a Cobrar ($)</label>
-            <input id="sale-total" type="number" step="0.5" value="5.00" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm font-bold text-stone-900 bg-stone-50 outline-none">
+            <label class="block text-xs font-semibold text-stone-600 mb-1">Total Cobrado ($)</label>
+            <input id="sale-total" type="number" step="0.5" value="6.50" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm font-bold text-stone-900 bg-stone-50 outline-none">
           </div>
           <div>
             <label class="block text-xs font-semibold text-stone-600 mb-1">Monto Pagado ($)</label>
-            <input id="sale-paid" type="number" step="0.5" value="5.00" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm font-bold text-emerald-700 outline-none">
+            <input id="sale-paid" type="number" step="0.5" value="6.50" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm font-bold text-emerald-700 outline-none">
           </div>
           <div class="flex items-end">
             <button onclick="addSale()" class="w-full bg-stone-900 hover:bg-stone-800 text-white font-semibold py-2 px-3 rounded-lg text-sm transition shadow-sm">
@@ -165,7 +153,7 @@
       <div class="bg-white rounded-xl shadow-sm border border-stone-200 overflow-hidden">
         <div class="p-4 bg-stone-50 border-b border-stone-200 flex flex-wrap justify-between items-center gap-3">
           <div class="flex items-center gap-2">
-            <h3 class="font-bold text-stone-800 text-sm">Historial de Ventas y Cobranzas</h3>
+            <h3 class="font-bold text-stone-800 text-sm">Historial de Ventas</h3>
             <span id="sales-count" class="text-xs bg-stone-200 text-stone-700 px-2.5 py-0.5 rounded-full font-semibold">0 registros</span>
           </div>
           <div class="flex items-center gap-2">
@@ -180,8 +168,7 @@
             <thead class="bg-stone-100 text-stone-600 text-xs uppercase font-semibold sticky top-0">
               <tr>
                 <th class="p-3">Cliente</th>
-                <th class="p-3 text-center">Producto</th>
-                <th class="p-3">Entrega</th>
+                <th class="p-3">Producto / Modalidad</th>
                 <th class="p-3 text-right">Total ($)</th>
                 <th class="p-3 text-right">Pagado ($)</th>
                 <th class="p-3 text-right">Faltante ($)</th>
@@ -198,81 +185,81 @@
 
     </div>
 
-    <!-- TAB 2: PRECIOS OFICIALES & MENSAJES -->
+    <!-- TAB 2: PRECIOS OFICIALES CON DELIVERY INCLUIDO -->
     <div id="tab-combos" class="hidden space-y-6">
       
       <div class="bg-white p-5 rounded-xl shadow-sm border border-stone-200">
         <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
           <div>
             <h2 class="text-base font-bold text-stone-800 flex items-center gap-2">
-              <span>⭐</span> Lista Oficial de Precios (1 Solo Pote de 1 KG • Cero Pérdidas)
+              <span>⭐</span> Menú Comercial: Precios con Delivery Incluido (Lo que ve el cliente)
             </h2>
-            <p class="text-xs text-stone-500">Masa lista cruda congelada en casa. Precios sin pérdida y con delivery justo.</p>
+            <p class="text-xs text-stone-500">El cliente ve el precio final todo incluido. Quien retira en casa recibe descuento.</p>
           </div>
-          <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-3 py-1 rounded-full border border-emerald-200">100% Maíz Natural • Sin Químicos</span>
+          <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-3 py-1 rounded-full border border-emerald-200">Cero Fricción al Vender</span>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs mt-4">
           
-          <!-- Presentación 500g -->
+          <!-- Pote 500g -->
           <div class="p-4 rounded-xl border border-stone-200 bg-stone-50/50 flex flex-col justify-between space-y-3">
             <div>
-              <span class="text-[10px] font-bold uppercase tracking-wider text-stone-400">Porción Pareja (500g)</span>
-              <h3 class="font-bold text-stone-800 text-sm mt-0.5">1 Pote de 500g</h3>
-              <p class="text-stone-500 mt-1 text-[11px]">Rinde 2 cachapas grandes de budare. Pote chino con tapa.</p>
+              <span class="text-[10px] font-bold uppercase tracking-wider text-stone-400">Prueba / Pareja (500g)</span>
+              <h3 class="font-bold text-stone-800 text-sm mt-0.5">Pote 500g a tu Puerta</h3>
+              <p class="text-stone-500 mt-1 text-[11px]">Rinde 2 cachapas grandes. Listo en tu budare.</p>
               
               <div class="mt-3">
-                <span class="text-2xl font-extrabold text-stone-900">$3.00</span>
-                <span class="text-[10px] text-stone-600 block">🏠 <strong>Retiro en tu casa</strong></span>
-                <span class="text-[10px] text-amber-800 block">🛵 Con delivery cercano: <strong>$4.50</strong></span>
+                <span class="text-2xl font-extrabold text-stone-900">$4.50</span>
+                <span class="text-[10px] text-emerald-700 font-bold block">🛵 ¡DELIVERY INCLUIDO!</span>
+                <span class="text-[10px] text-stone-400 block mt-0.5">*(O solo $3.00 si retiras en casa)*</span>
               </div>
             </div>
             <div class="border-t border-stone-200 pt-2 text-[11px] text-stone-600">
-              Costo fabricación: <strong>$2.01</strong><br>
-              Tu ganancia en casa: <strong class="text-emerald-700">+$0.99 limpia</strong>
+              Costo total (masa + pote + viaje): <strong>$3.51</strong><br>
+              Tu ganancia neta asegurada: <strong class="text-emerald-700">+$0.99 limpio (~$1.00)</strong>
             </div>
           </div>
 
-          <!-- Presentación 1 KG -->
+          <!-- Pote 1 KG (Estrella) -->
           <div class="p-4 rounded-xl border-2 border-stone-900 bg-white flex flex-col justify-between space-y-3 shadow-sm">
             <div>
               <div class="flex items-center justify-between">
                 <span class="text-[10px] font-bold uppercase tracking-wider text-amber-800">EL MÁS POPULAR</span>
                 <span class="text-[10px] bg-amber-100 text-amber-900 font-bold px-2 py-0.5 rounded">1 SOLO POTE</span>
               </div>
-              <h3 class="font-bold text-stone-900 text-sm mt-0.5">1 Pote de 1 KG (1.000g)</h3>
-              <p class="text-stone-500 mt-1 text-[11px]">Rinde 4 cachapas grandes. Se despacha en 1 solo envase de 1kg.</p>
+              <h3 class="font-bold text-stone-900 text-sm mt-0.5">Pote 1 KG a tu Puerta</h3>
+              <p class="text-stone-500 mt-1 text-[11px]">Rinde 4 cachapas grandes. El almuerzo o cena completo.</p>
               
               <div class="mt-3">
-                <span class="text-2xl font-extrabold text-stone-900">$5.00</span>
-                <span class="text-[10px] text-stone-600 block">🏠 <strong>Retiro en tu casa</strong> (No gastas gasolina)</span>
-                <span class="text-[10px] text-amber-800 font-semibold block">🛵 Con delivery cercano: <strong>$6.50</strong></span>
+                <span class="text-2xl font-extrabold text-stone-900">$6.50</span>
+                <span class="text-[10px] text-emerald-700 font-bold block">🛵 ¡DELIVERY INCLUIDO!</span>
+                <span class="text-[10px] text-stone-400 block mt-0.5">*(O solo $5.00 si retiras en casa)*</span>
               </div>
             </div>
             <div class="border-t border-stone-200 pt-2 text-[11px] text-stone-600">
-              Costo fabricación (1 solo pote): <strong>$3.74</strong><br>
-              Tu ganancia en casa: <strong class="text-emerald-700">+$1.26 limpia</strong>
+              Costo total (masa 1kg + envase + viaje): <strong>$5.24</strong><br>
+              Tu ganancia neta asegurada: <strong class="text-emerald-700">+$1.26 a $1.76 limpios</strong>
             </div>
           </div>
 
-          <!-- Presentación 2 KG Promo -->
+          <!-- Combo 2 KG Familiar -->
           <div class="p-4 rounded-xl border-2 border-stone-900 bg-stone-900 text-white flex flex-col justify-between space-y-3 shadow-md">
             <div>
               <div class="flex items-center justify-between">
                 <span class="text-[10px] font-bold uppercase tracking-wider text-amber-300">⭐ COMBO FAMILIAR</span>
-                <span class="text-[9px] bg-amber-400 text-stone-950 font-extrabold px-1.5 py-0.5 rounded">ENVÍO GRATIS</span>
+                <span class="text-[9px] bg-amber-400 text-stone-950 font-extrabold px-1.5 py-0.5 rounded">MEJOR PRECIO</span>
               </div>
-              <h3 class="font-bold text-white text-sm mt-0.5">Combo Familiar 2 KG (2 Potes 1Kg)</h3>
-              <p class="text-stone-300 mt-1 text-[11px]">8 cachapas para toda la familia. 2 potes de 1kg listos para congelar.</p>
+              <h3 class="font-bold text-white text-sm mt-0.5">Combo Familiar 2 KG (2 Potes)</h3>
+              <p class="text-stone-300 mt-1 text-[11px]">8 cachapas para toda la familia en el fin de semana.</p>
               
               <div class="mt-3">
                 <span class="text-2xl font-extrabold text-amber-300">$11.00</span>
-                <span class="text-[10px] text-stone-300 block">🛵 <strong>¡DELIVERY GRATIS INCLUIDO!</strong></span>
-                <span class="text-[9px] text-stone-400">(Zona cercana &lt; 3 km)</span>
+                <span class="text-[10px] text-emerald-400 font-bold block">🛵 ¡DELIVERY INCLUIDO!</span>
+                <span class="text-[9px] text-stone-400 block mt-0.5">*(Ahorras $2 frente a comprar por separado)*</span>
               </div>
             </div>
             <div class="border-t border-stone-700 pt-2 text-[11px] text-stone-300">
-              Costo (masa + 2 potes + gasolina moto): <strong>~$8.98</strong><br>
+              Costo (masa 2kg + 2 potes + 1 viaje): <strong>~$8.98</strong><br>
               Tu ganancia en 1 solo viaje: <strong class="text-emerald-400">+$2.02 limpios</strong>
             </div>
           </div>
@@ -282,37 +269,39 @@
         <!-- Mensajes para WhatsApp -->
         <div class="mt-6 space-y-4">
           <h4 class="font-bold text-stone-800 text-xs uppercase tracking-wider">
-            📲 Mensajes Listos para WhatsApp (Copiar y Pegar)
+            📲 Mensajes para Publicar y Responder (Delivery Incluido)
           </h4>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             
-            <!-- Mensaje 1: Estados -->
             <div class="p-3.5 rounded-xl bg-stone-50 border border-stone-200">
               <div class="flex items-center justify-between mb-2">
-                <span class="font-bold text-stone-800 text-xs">1. Publicación de Estados</span>
+                <span class="font-bold text-stone-800 text-xs">Publicación para Estados de WhatsApp</span>
                 <button onclick="copyText('msg-status')" class="text-xs bg-stone-900 text-white px-2.5 py-1 rounded font-semibold hover:bg-stone-800">Copiar</button>
               </div>
               <pre id="msg-status" class="bg-white p-2.5 rounded border border-stone-200 text-stone-700 text-[11px] font-mono whitespace-pre-wrap">🌽 *MASA DE CACHAPA 100% MAÍZ NATURAL* 🌽
-¡Recién molida en casa! Sin conservantes químicos ni añadidos. Sabor criollo auténtico.
+¡Recién molida en casa! Sin conservantes químicos. Sabor criollo auténtico directo a tu budare.
 
-🥣 *Pote 500g (2 cachapas):* $3.00
-🥣 *Pote 1 KG (4 cachapas):* $5.00 (Retiro en casa)
-🔥 *COMBO FAMILIAR (2 KG):* $11.00 con *DELIVERY GRATIS* (zona cercana) 🛵💨
+🥣 *Pote 500g (2 cachapas):* $4.50 con Delivery Incluido 🛵
+🥣 *Pote 1 KG (4 cachapas):* $6.50 con Delivery Incluido 🛵
+🔥 *COMBO FAMILIAR 2 KG:* $11.00 con Delivery Incluido 🛵💨
+
+*(Si retiras directo en casa tienes $1.50 de descuento)*
 
 Vienen congeladas listas para cocinar.
 ¡Escríbeme al privado para apartar la tuya! 👇</pre>
             </div>
 
-            <!-- Mensaje 2: Cobro de Delivery con amabilidad -->
             <div class="p-3.5 rounded-xl bg-stone-50 border border-stone-200">
               <div class="flex items-center justify-between mb-2">
-                <span class="font-bold text-stone-800 text-xs">2. Cuando piden 1 Pote con Delivery</span>
-                <button onclick="copyText('msg-delivery')" class="text-xs bg-stone-900 text-white px-2.5 py-1 rounded font-semibold hover:bg-stone-800">Copiar</button>
+                <span class="font-bold text-stone-800 text-xs">Cuando un cliente te escribe para pedir</span>
+                <button onclick="copyText('msg-reply')" class="text-xs bg-stone-900 text-white px-2.5 py-1 rounded font-semibold hover:bg-stone-800">Copiar</button>
               </div>
-              <pre id="msg-delivery" class="bg-white p-2.5 rounded border border-stone-200 text-stone-700 text-[11px] font-mono whitespace-pre-wrap">¡Hola! Claro que sí, con mucho gusto. Te sale en $5.00 el pote de 1 KG retirando en casa, o por $6.50 te lo dejamos en la puerta con el delivery en moto 🛵. 
+              <pre id="msg-reply" class="bg-white p-2.5 rounded border border-stone-200 text-stone-700 text-[11px] font-mono whitespace-pre-wrap">¡Hola! Claro que sí, con mucho gusto. 
+Te sale en $6.50 el pote de 1 KG ya puesto en la puerta de tu casa con el delivery 🛵. 
+O si llevas el Combo Familiar de 2 KG te queda en solo $11.00. 
 
-O si prefieres, en el Combo Familiar de 2 KG ($11) ¡el delivery te sale totalmente GRATIS! ¿Cuál te preparo?</pre>
+¿Cuál te preparo para enviártelo?</pre>
             </div>
 
           </div>
@@ -322,65 +311,53 @@ O si prefieres, en el Combo Familiar de 2 KG ($11) ¡el delivery te sale totalme
 
     </div>
 
-    <!-- TAB 3: ESTRUCTURA DE COSTOS DETALLADA -->
+    <!-- TAB 3: COSTOS REALES CON 18 POTES POR SACO -->
     <div id="tab-costos" class="hidden space-y-6">
       
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        
-        <div class="p-5 rounded-xl border border-stone-200 bg-white shadow-sm space-y-2">
-          <span class="text-xs font-bold text-stone-500 uppercase tracking-wider">Costo Real de 1 Pote (500g)</span>
-          <div class="text-3xl font-extrabold text-stone-900">$2.01</div>
-          <div class="text-xs text-stone-500 space-y-1 pt-2 border-t border-stone-100">
-            <div>• Maíz crudo molido (446g): <strong>$1.25</strong></div>
-            <div>• Pote chino con tapa: <strong>$0.33</strong></div>
-            <div>• Leche en polvo Upaca (11.7g): <strong>$0.28</strong></div>
-            <div>• Azúcar refinada (26.7g): <strong>$0.10</strong></div>
-            <div>• Harina PAN (16.7g): <strong>$0.04</strong></div>
-            <div>• Sal y agua potable: <strong>$0.01</strong></div>
-          </div>
-        </div>
+      <div class="bg-white p-5 rounded-xl shadow-sm border border-stone-200">
+        <h3 class="text-sm font-bold text-stone-800 mb-2 flex items-center gap-2">
+          <span>⚖️</span> Rendimiento Realista: Saco de Jojoto rindiendo 18 Potes (9 Kilos)
+        </h3>
+        <p class="text-xs text-stone-500 mb-4">Calculado sobre el rendimiento más común en Venezuela (maíz comercial estándar con merma normal).</p>
 
-        <div class="p-5 rounded-xl border-2 border-stone-800 bg-white shadow-sm space-y-2">
-          <span class="text-xs font-bold text-stone-900 uppercase tracking-wider">Costo Real de 1 Pote de 1 KG (1 Solo Envase)</span>
-          <div class="text-3xl font-extrabold text-emerald-700">$3.74</div>
-          <div class="text-xs text-stone-600 space-y-1 pt-2 border-t border-stone-100">
-            <div>• Masa lista cruda (1.000g): <strong>$3.36</strong></div>
-            <div>• 1 Solo Pote grande de 1 KG + tapa: <strong>$0.38</strong> (ahorras empaque)</div>
-            <div class="text-emerald-800 font-semibold pt-1">
-              ✅ Al retirar en tu casa a <strong>$5.00</strong>: Ganas <strong>+$1.26 limpios</strong>.<br>
-              ✅ Con delivery cobrado a <strong>$6.50</strong>: Ganas tus <strong>$1.26</strong> y cubres el viaje ($1.50).
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          
+          <div class="p-4 rounded-xl border border-stone-200 bg-stone-50/50 space-y-2">
+            <span class="font-bold text-stone-800 text-sm block">1 Pote de 500g (Rinde 18 potes/saco)</span>
+            <div class="space-y-1 text-stone-600">
+              <div>• Maíz crudo (1/18 de saco de $25): <strong>$1.39</strong></div>
+              <div>• Leche en polvo, azúcar, harina, sal: <strong>$0.30</strong></div>
+              <div>• Pote chino con tapa: <strong>$0.33</strong></div>
+              <div>• Costo de fabricación: <strong>$2.02</strong></div>
+              <div>• Costo de gasolina / moto en viaje: <strong>$1.50</strong></div>
+              <div class="border-t border-stone-200 pt-1 text-stone-800">
+                <strong>Costo total puesto en su casa: $3.52</strong><br>
+                Precio cobrado: <strong>$4.50</strong><br>
+                <span class="text-emerald-700 font-bold">Tu ganancia limpia: +$0.98 (~$1.00 exacto) ✅</span>
+              </div>
             </div>
           </div>
+
+          <div class="p-4 rounded-xl border-2 border-stone-900 bg-white space-y-2">
+            <span class="font-bold text-stone-900 text-sm block">1 Pote de 1 KG (Rinde 9 potes de 1kg/saco)</span>
+            <div class="space-y-1 text-stone-600">
+              <div>• Maíz crudo (1/9 de saco de $25): <strong>$2.78</strong></div>
+              <div>• Leche en polvo, azúcar, harina, sal: <strong>$0.60</strong></div>
+              <div>• 1 Solo Pote grande de 1 KG con tapa: <strong>$0.38</strong></div>
+              <div>• Costo de fabricación: <strong>$3.76</strong></div>
+              <div>• Costo de gasolina / moto en viaje: <strong>$1.50</strong></div>
+              <div class="border-t border-stone-200 pt-1 text-stone-800">
+                <strong>Costo total puesto en su casa: $5.26</strong><br>
+                Precio cobrado: <strong>$6.50</strong><br>
+                <span class="text-emerald-700 font-bold">Tu ganancia limpia: +$1.24 (o +$1.74 si cobras $7) ✅</span>
+              </div>
+            </div>
+          </div>
+
         </div>
 
-      </div>
-
-      <!-- Precios de Materia Prima -->
-      <div class="bg-white p-5 rounded-xl shadow-sm border border-stone-200">
-        <h3 class="text-sm font-bold text-stone-800 mb-3 flex items-center gap-2">
-          <span>💵</span> Precios de Materia Prima en el Mercado
-        </h3>
-        <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 text-xs">
-          <div>
-            <label class="font-semibold text-stone-600 block">Saco Jojoto ($)</label>
-            <input id="price-sack" type="number" step="1" value="25" class="w-full mt-1 border border-stone-300 rounded-lg px-2.5 py-1.5 font-bold" onchange="calculateRecipeCosts()">
-          </div>
-          <div>
-            <label class="font-semibold text-stone-600 block">Azúcar (1 Kg) Bs</label>
-            <input id="price-sugar-bs" type="number" step="1" value="1854" class="w-full mt-1 border border-stone-300 rounded-lg px-2.5 py-1.5" onchange="calculateRecipeCosts()">
-          </div>
-          <div>
-            <label class="font-semibold text-stone-600 block">Leche 900g Bs</label>
-            <input id="price-milk-bs" type="number" step="10" value="10389" class="w-full mt-1 border border-stone-300 rounded-lg px-2.5 py-1.5" onchange="calculateRecipeCosts()">
-          </div>
-          <div>
-            <label class="font-semibold text-stone-600 block">Harina PAN Bs</label>
-            <input id="price-flour-bs" type="number" step="1" value="1021" class="w-full mt-1 border border-stone-300 rounded-lg px-2.5 py-1.5" onchange="calculateRecipeCosts()">
-          </div>
-          <div>
-            <label class="font-semibold text-stone-600 block">Pote 1 KG ($ c/u)</label>
-            <input id="price-container-usd" type="number" step="0.01" value="0.38" class="w-full mt-1 border border-stone-300 rounded-lg px-2.5 py-1.5 font-bold" onchange="calculateRecipeCosts()">
-          </div>
+        <div class="mt-4 p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-900">
+          <strong>Resultado por cada saco de jojoto que mueles:</strong> Te deja entre <strong>$15.00 y $18.00 de ganancia neta en tu bolsillo</strong>, asegurando tu sueldo y la reposición del próximo saco sin tocar tus ahorros.
         </div>
       </div>
 
@@ -396,7 +373,6 @@ O si prefieres, en el Combo Familiar de 2 KG ($11) ¡el delivery te sale totalme
           La textura del jojoto cambia drásticamente la cantidad de potes. Selecciona cómo vino el maíz para recibir la recomendación exacta de agua y espesante.
         </p>
 
-        <!-- Selector del Estado del Maíz -->
         <div class="mb-5 p-4 rounded-xl bg-stone-50 border border-stone-200">
           <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">¿Cómo vino el maíz de este lote?</label>
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -404,7 +380,7 @@ O si prefieres, en el Combo Familiar de 2 KG ($11) ¡el delivery te sale totalme
               <input type="radio" name="corn_state" value="tierno" id="radio-corn-tierno" class="mt-1 text-stone-900">
               <div>
                 <span class="text-xs font-bold text-stone-800 block">💧 Muy Tierno (Lechoso)</span>
-                <span class="text-[11px] text-stone-500 leading-tight block mt-0.5">Mucha agua libre. Reduce agua a 50-100ml y añade ~70g harina. Rinde ~8-9 potes de 1kg por saco.</span>
+                <span class="text-[11px] text-stone-500 leading-tight block mt-0.5">Mucha agua libre. Reduce agua a 50-100ml y añade ~70g harina.</span>
               </div>
             </label>
 
@@ -412,7 +388,7 @@ O si prefieres, en el Combo Familiar de 2 KG ($11) ¡el delivery te sale totalme
               <input type="radio" name="corn_state" value="optimo" id="radio-corn-optimo" checked class="mt-1 text-stone-900">
               <div>
                 <span class="text-xs font-bold text-stone-800 block">🌽 Punto Ideal (Equilibrado)</span>
-                <span class="text-[11px] text-stone-500 leading-tight block mt-0.5">Grano tierno pero con cuerpo. Textura cremosa estándar. Rinde ~10-11 potes de 1kg por saco.</span>
+                <span class="text-[11px] text-stone-500 leading-tight block mt-0.5">Grano tierno pero con cuerpo. Textura cremosa estándar.</span>
               </div>
             </label>
 
@@ -420,7 +396,7 @@ O si prefieres, en el Combo Familiar de 2 KG ($11) ¡el delivery te sale totalme
               <input type="radio" name="corn_state" value="seco" id="radio-corn-seco" class="mt-1 text-stone-900">
               <div>
                 <span class="text-xs font-bold text-stone-800 block">🌾 Sazón / Seco (Almidonado)</span>
-                <span class="text-[11px] text-stone-500 leading-tight block mt-0.5">Molienda gruesa. El almidón absorbe agua y expande masa. Rinde 12 a 14 potes de 1kg por saco.</span>
+                <span class="text-[11px] text-stone-500 leading-tight block mt-0.5">Molienda gruesa. El almidón absorbe agua y expande masa.</span>
               </div>
             </label>
           </div>
@@ -449,7 +425,7 @@ O si prefieres, en el Combo Familiar de 2 KG ($11) ¡el delivery te sale totalme
           </div>
           <div>
             <label class="block text-xs font-semibold text-stone-600 mb-1">Kilos Finales Obtenidos</label>
-            <input id="lot-potes" type="number" value="10" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm font-bold text-stone-900 outline-none focus:border-stone-600" oninput="calculateLotYield()">
+            <input id="lot-potes" type="number" value="9" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm font-bold text-stone-900 outline-none focus:border-stone-600" oninput="calculateLotYield()">
             <span class="text-[10px] text-stone-400">Potes de 1 KG envasados</span>
           </div>
           <div class="flex items-end">
@@ -462,7 +438,7 @@ O si prefieres, en el Combo Familiar de 2 KG ($11) ¡el delivery te sale totalme
         <div id="lot-yield-alert" class="mt-4 p-3 rounded-lg bg-stone-100 border border-stone-200 text-xs text-stone-800 flex items-center justify-between">
           <div>
             <span class="font-bold">Diagnóstico del Lote:</span> 
-            <span id="lot-yield-text">892g de maíz crudo por kilo de masa. Rendimiento saludable (10 potes de 1kg/saco).</span>
+            <span id="lot-yield-text">991g de maíz crudo por kilo. Rendimiento realista estándar (~9 kilos/saco).</span>
           </div>
         </div>
       </div>
@@ -548,7 +524,7 @@ O si prefieres, en el Combo Familiar de 2 KG ($11) ¡el delivery te sale totalme
         sugarKgBs: 1854.00,
         milk900gBs: 10389.00,
         flourKgBs: 1021.00,
-        containerUSD: 0.38 // Pote de 1 KG con tapa
+        containerUSD: 0.38
       },
       inventory: [
         { id: 'jojoto', name: 'Sacos de Jojoto', qty: 2, unit: 'sacos', min: 1, icon: '🌽' },
@@ -559,37 +535,37 @@ O si prefieres, en el Combo Familiar de 2 KG ($11) ¡el delivery te sale totalme
         { id: 'harina', name: 'Harina PAN / Trigo', qty: 2000, unit: 'gramos', min: 500, icon: '🌾' }
       ],
       lots: [
-        { id: 1, name: 'Lote 1', sacks: 1, rawGrams: 8900, potes: 18, state: 'seco', notes: '18 kg inicial' },
-        { id: 2, name: 'Lote 2', sacks: 2, rawGrams: 17800, potes: 22, state: 'optimo', notes: '11 kg por saco' },
-        { id: 3, name: 'Lote 3', sacks: 2, rawGrams: 16000, potes: 15, state: 'tierno', notes: '7.5 kg por saco' },
-        { id: 4, name: 'Lote 4', sacks: 2, rawGrams: 14000, potes: 9, state: 'tierno', notes: 'Maíz aguado (4.5 kg/saco)' },
-        { id: 5, name: 'Lote 5', sacks: 2, rawGrams: 15000, potes: 10, state: 'tierno', notes: '5 kg por saco' }
+        { id: 1, name: 'Lote 1', sacks: 1, rawGrams: 8900, potes: 18, state: 'seco', notes: '18 potes 500g' },
+        { id: 2, name: 'Lote 2', sacks: 2, rawGrams: 17800, potes: 22, state: 'optimo', notes: '11 kg/saco' },
+        { id: 3, name: 'Lote 3', sacks: 2, rawGrams: 16000, potes: 15, state: 'tierno', notes: '7.5 kg/saco' },
+        { id: 4, name: 'Lote 4', sacks: 2, rawGrams: 14000, potes: 9, state: 'tierno', notes: '4.5 kg/saco' },
+        { id: 5, name: 'Lote 5', sacks: 2, rawGrams: 15000, potes: 10, state: 'tierno', notes: '5 kg/saco' }
       ],
       sales: [
-        { id: 1, client: 'Carolina', phone: '', product: '1 Pote 1 KG', qty: 1, delivery: 'pickup', total: 5, paid: 5, status: 'paid', date: '2026-11-01' },
-        { id: 2, client: 'Carlos', phone: '', product: '1 Pote 500g', qty: 1, delivery: 'pickup', total: 3, paid: 0, status: 'debt', date: '2026-11-01' },
-        { id: 3, client: 'Alisney', phone: '', product: '1 Pote 500g', qty: 1, delivery: 'pickup', total: 3, paid: 3, status: 'paid', date: '2026-11-01' },
-        { id: 4, client: 'Yuna', phone: '', product: '1 Pote 1 KG', qty: 1, delivery: 'pickup', total: 5, paid: 5, status: 'paid', date: '2026-11-01' },
-        { id: 5, client: 'Gadiel', phone: '', product: '1 Pote 500g', qty: 1, delivery: 'pickup', total: 3, paid: 3, status: 'paid', date: '2026-11-01' },
-        { id: 6, client: 'Dircy', phone: '', product: 'Combo 2 KG', qty: 1, delivery: 'pickup', total: 10, paid: 10, status: 'paid', date: '2026-11-01' },
-        { id: 7, client: 'Andres', phone: '', product: '1 Pote 500g', qty: 1, delivery: 'pickup', total: 3, paid: 0, status: 'debt', date: '2026-11-01' },
-        { id: 8, client: 'Mary', phone: '', product: '1 Pote 1 KG', qty: 1, delivery: 'pickup', total: 5, paid: 5, status: 'paid', date: '2026-11-01' },
-        { id: 9, client: 'Adela', phone: '', product: 'Combo 2 KG', qty: 1, delivery: 'pickup', total: 10, paid: 10, status: 'paid', date: '2026-11-01' },
-        { id: 10, client: 'Naya', phone: '', product: '1 Pote 500g', qty: 1, delivery: 'pickup', total: 3, paid: 3, status: 'paid', date: '2026-11-01' },
-        { id: 11, client: 'Adelky', phone: '', product: '1 Pote 500g', qty: 1, delivery: 'pickup', total: 3, paid: 0, status: 'debt', date: '2026-11-01' },
-        { id: 12, client: 'Nata', phone: '', product: '1 Pote 500g', qty: 1, delivery: 'pickup', total: 3, paid: 0, status: 'debt', date: '2026-11-01' },
-        { id: 13, client: 'Nircy', phone: '', product: '1 Pote 500g', qty: 1, delivery: 'pickup', total: 3, paid: 0, status: 'debt', date: '2026-11-01' },
-        { id: 14, client: 'Gerald', phone: '', product: '1 Pote 1 KG', qty: 1, delivery: 'pickup', total: 5, paid: 2, status: 'partial', date: '2026-11-02' },
-        { id: 15, client: 'Jhony', phone: '', product: '4 Potes 1 KG', qty: 4, delivery: 'pickup', total: 20, paid: 20, status: 'paid', date: '2026-11-05' },
-        { id: 16, client: 'Tía Jovi', phone: '', product: '1 Pote 500g', qty: 1, delivery: 'pickup', total: 3, paid: 0, status: 'debt', date: '2026-11-05' },
-        { id: 17, client: 'Daniel', phone: '', product: '1 Pote 1 KG', qty: 1, delivery: 'pickup', total: 5, paid: 0, status: 'debt', date: '2026-11-08' },
-        { id: 18, client: 'Lucy', phone: '', product: 'Combo 2 KG', qty: 1, delivery: 'pickup', total: 10, paid: 0, status: 'debt', date: '2026-11-08' },
-        { id: 19, client: 'Rossys', phone: '', product: '1 Pote 1 KG', qty: 1, delivery: 'pickup', total: 5, paid: 0, status: 'debt', date: '2026-11-08' },
-        { id: 20, client: 'Dc Luis', phone: '', product: '1 Pote 1 KG', qty: 1, delivery: 'pickup', total: 5, paid: 0, status: 'debt', date: '2026-11-08' },
-        { id: 21, client: 'Aquiles', phone: '', product: 'Combo 1.5 KG', qty: 1, delivery: 'pickup', total: 8, paid: 5, status: 'partial', date: '2026-11-12' },
-        { id: 22, client: 'Franco', phone: '', product: '1 Pote 1 KG', qty: 1, delivery: 'pickup', total: 5, paid: 0, status: 'debt', date: '2026-11-15' },
-        { id: 23, client: 'Rodolfo', phone: '', product: '1 Pote 500g', qty: 1, delivery: 'pickup', total: 3, paid: 0, status: 'debt', date: '2026-11-15' },
-        { id: 24, client: 'Luis Brea', phone: '', product: '1 Pote 500g', qty: 1, delivery: 'pickup', total: 3, paid: 0, status: 'debt', date: '2026-11-15' }
+        { id: 1, client: 'Carolina', phone: '', product: 'Pote 1 KG (Delivery)', total: 6.5, paid: 6.5, status: 'paid', date: '2026-11-01' },
+        { id: 2, client: 'Carlos', phone: '', product: 'Pote 500g (Casa)', total: 3.0, paid: 0, status: 'debt', date: '2026-11-01' },
+        { id: 3, client: 'Alisney', phone: '', product: 'Pote 500g (Casa)', total: 3.0, paid: 3.0, status: 'paid', date: '2026-11-01' },
+        { id: 4, client: 'Yuna', phone: '', product: 'Pote 1 KG (Delivery)', total: 6.5, paid: 6.5, status: 'paid', date: '2026-11-01' },
+        { id: 5, client: 'Gadiel', phone: '', product: 'Pote 500g (Casa)', total: 3.0, paid: 3.0, status: 'paid', date: '2026-11-01' },
+        { id: 6, client: 'Dircy', phone: '', product: 'Combo 2 KG', total: 11.0, paid: 11.0, status: 'paid', date: '2026-11-01' },
+        { id: 7, client: 'Andres', phone: '', product: 'Pote 500g (Casa)', total: 3.0, paid: 0, status: 'debt', date: '2026-11-01' },
+        { id: 8, client: 'Mary', phone: '', product: 'Pote 1 KG (Delivery)', total: 6.5, paid: 6.5, status: 'paid', date: '2026-11-01' },
+        { id: 9, client: 'Adela', phone: '', product: 'Combo 2 KG', total: 11.0, paid: 11.0, status: 'paid', date: '2026-11-01' },
+        { id: 10, client: 'Naya', phone: '', product: 'Pote 500g (Casa)', total: 3.0, paid: 3.0, status: 'paid', date: '2026-11-01' },
+        { id: 11, client: 'Adelky', phone: '', product: 'Pote 500g (Casa)', total: 3.0, paid: 0, status: 'debt', date: '2026-11-01' },
+        { id: 12, client: 'Nata', phone: '', product: 'Pote 500g (Casa)', total: 3.0, paid: 0, status: 'debt', date: '2026-11-01' },
+        { id: 13, client: 'Nircy', phone: '', product: 'Pote 500g (Casa)', total: 3.0, paid: 0, status: 'debt', date: '2026-11-01' },
+        { id: 14, client: 'Gerald', phone: '', product: 'Pote 1 KG (Casa)', total: 5.0, paid: 2.0, status: 'partial', date: '2026-11-02' },
+        { id: 15, client: 'Jhony', phone: '', product: 'Combo 4 KG', total: 22.0, paid: 22.0, status: 'paid', date: '2026-11-05' },
+        { id: 16, client: 'Tía Jovi', phone: '', product: 'Pote 500g (Casa)', total: 3.0, paid: 0, status: 'debt', date: '2026-11-05' },
+        { id: 17, client: 'Daniel', phone: '', product: 'Pote 1 KG (Delivery)', total: 6.5, paid: 0, status: 'debt', date: '2026-11-08' },
+        { id: 18, client: 'Lucy', phone: '', product: 'Combo 2 KG', total: 11.0, paid: 0, status: 'debt', date: '2026-11-08' },
+        { id: 19, client: 'Rossys', phone: '', product: 'Pote 1 KG (Delivery)', total: 6.5, paid: 0, status: 'debt', date: '2026-11-08' },
+        { id: 20, client: 'Dc Luis', phone: '', product: 'Pote 1 KG (Delivery)', total: 6.5, paid: 0, status: 'debt', date: '2026-11-08' },
+        { id: 21, client: 'Aquiles', phone: '', product: 'Combo 2 KG', total: 11.0, paid: 5.0, status: 'partial', date: '2026-11-12' },
+        { id: 22, client: 'Franco', phone: '', product: 'Pote 1 KG (Delivery)', total: 6.5, paid: 0, status: 'debt', date: '2026-11-15' },
+        { id: 23, client: 'Rodolfo', phone: '', product: 'Pote 500g (Casa)', total: 3.0, paid: 0, status: 'debt', date: '2026-11-15' },
+        { id: 24, client: 'Luis Brea', phone: '', product: 'Pote 500g (Casa)', total: 3.0, paid: 0, status: 'debt', date: '2026-11-15' }
       ]
     };
 
@@ -635,98 +611,26 @@ O si prefieres, en el Combo Familiar de 2 KG ($11) ¡el delivery te sale totalme
       const adviceEl = document.getElementById('corn-technical-text');
 
       if (state === 'tierno') {
-        adviceEl.innerHTML = `<strong>⚠️ Alerta Maíz Muy Tierno:</strong> El maíz tiene exceso de agua libre. <u>Reduce agua a 50ml-100ml</u> y añade ~70g de harina para que cuaje. Rendimiento estimado: 8 a 9 potes de 1kg por saco.`;
+        adviceEl.innerHTML = `<strong>⚠️ Alerta Maíz Muy Tierno:</strong> El maíz tiene exceso de agua libre. Reduce agua a 50ml-100ml y añade ~70g de harina para que cuaje.`;
       } else if (state === 'seco') {
-        adviceEl.innerHTML = `<strong>🌾 Ventaja Maíz Seco / Sazón:</strong> Al moler queda harinoso. El almidón absorbe agua y expande masa. Añade 400ml-500ml de líquido y 30g de harina. Rinde 12 a 14 potes de 1kg por saco.`;
+        adviceEl.innerHTML = `<strong>🌾 Ventaja Maíz Seco / Sazón:</strong> Al moler queda harinoso. El almidón absorbe agua y expande masa. Añade 400ml-500ml de líquido.`;
       } else {
-        adviceEl.innerHTML = `<strong>🌽 Punto Ideal:</strong> Equilibrio perfecto. 300ml de agua y 50g de harina por bolsa de 1.500g. Rinde ~10-11 potes de 1kg por saco.`;
+        adviceEl.innerHTML = `<strong>🌽 Punto Ideal:</strong> Equilibrio perfecto. 300ml de agua y 50g de harina por bolsa de 1.500g.`;
       }
 
       saveData();
     }
 
-    function getUnitCosts() {
-      const rate = appData.rateBCV;
-      const sackUSD = appData.prices.sackUSD;
-      
-      let potes1kPerSack = 10;
-      if (appData.cornState === 'tierno') potes1kPerSack = 8.5;
-      if (appData.cornState === 'seco') potes1kPerSack = 13;
-
-      const cornCostPerKg = sackUSD / potes1kPerSack;
-      
-      const sugarCostUSD = (53.3 / 1000) * (appData.prices.sugarKgBs / rate);
-      const milkCostUSD = (23.3 / 900) * (appData.prices.milk900gBs / rate);
-      const flourCostUSD = (33.3 / 1000) * (appData.prices.flourKgBs / rate);
-      const containerCostUSD = appData.prices.containerUSD;
-
-      const total1kUSD = cornCostPerKg + sugarCostUSD + milkCostUSD + flourCostUSD + containerCostUSD;
-      const total500gUSD = (total1kUSD - containerCostUSD) / 2 + 0.33;
-
-      return {
-        total1kUSD,
-        total500gUSD,
-        total1kBs: total1kUSD * rate,
-        total500gBs: total500gUSD * rate
-      };
-    }
-
     function applyProductSelection() {
-      const product = document.getElementById('sale-combo-select').value;
-      const customContainer = document.getElementById('custom-qty-container');
-      const deliverySelect = document.getElementById('sale-delivery-type');
-      let basePrice = 5.00;
+      const selection = document.getElementById('sale-combo-select').value;
+      let total = 6.50;
 
-      if (product === 'pote_500g') {
-        basePrice = 3.00;
-        customContainer.classList.add('hidden');
-      } else if (product === 'pote_1kg') {
-        basePrice = 5.00;
-        customContainer.classList.add('hidden');
-      } else if (product === 'combo_2kg') {
-        basePrice = 11.00;
-        deliverySelect.value = 'delivery_free';
-        customContainer.classList.add('hidden');
-      } else if (product === 'combo_3kg') {
-        basePrice = 16.00;
-        deliverySelect.value = 'delivery_free';
-        customContainer.classList.add('hidden');
-      } else if (product === 'custom') {
-        customContainer.classList.remove('hidden');
-        const qty = parseFloat(document.getElementById('sale-qty').value) || 1;
-        basePrice = qty * 5.00;
-      }
+      if (selection === 'pote_1kg_deliv') total = 6.50;
+      else if (selection === 'pote_500g_deliv') total = 4.50;
+      else if (selection === 'combo_2kg_deliv') total = 11.00;
+      else if (selection === 'pote_1kg_pickup') total = 5.00;
+      else if (selection === 'pote_500g_pickup') total = 3.00;
 
-      recalculateSaleTotal(basePrice);
-    }
-
-    function calculateCustomSale() {
-      const qty = parseFloat(document.getElementById('sale-qty').value) || 1;
-      recalculateSaleTotal(qty * 5.00);
-    }
-
-    function recalculateSaleTotal(overrideBase) {
-      const product = document.getElementById('sale-combo-select').value;
-      let base = overrideBase;
-
-      if (base === undefined) {
-        if (product === 'pote_500g') base = 3.00;
-        else if (product === 'pote_1kg') base = 5.00;
-        else if (product === 'combo_2kg') base = 11.00;
-        else if (product === 'combo_3kg') base = 16.00;
-        else {
-          const qty = parseFloat(document.getElementById('sale-qty').value) || 1;
-          base = qty * 5.00;
-        }
-      }
-
-      const deliveryType = document.getElementById('sale-delivery-type').value;
-      let deliveryFee = 0;
-      if (deliveryType === 'delivery_close') deliveryFee = 1.50;
-      else if (deliveryType === 'delivery_far') deliveryFee = 2.50;
-      else if (deliveryType === 'delivery_free') deliveryFee = 0.00;
-
-      const total = base + deliveryFee;
       document.getElementById('sale-total').value = total.toFixed(2);
       document.getElementById('sale-paid').value = total.toFixed(2);
     }
@@ -735,8 +639,7 @@ O si prefieres, en el Combo Familiar de 2 KG ($11) ¡el delivery te sale totalme
       const client = document.getElementById('sale-client').value.trim();
       const phone = document.getElementById('sale-phone').value.trim();
       const productSelect = document.getElementById('sale-combo-select');
-      const productText = productSelect.options[productSelect.selectedIndex].text.split(' - ')[0];
-      const delivery = document.getElementById('sale-delivery-type').value;
+      const productText = productSelect.options[productSelect.selectedIndex].text;
       const total = parseFloat(document.getElementById('sale-total').value) || 0;
       const paid = parseFloat(document.getElementById('sale-paid').value) || 0;
 
@@ -754,7 +657,6 @@ O si prefieres, en el Combo Familiar de 2 KG ($11) ¡el delivery te sale totalme
         client,
         phone,
         product: productText,
-        delivery,
         total,
         paid,
         status,
@@ -840,19 +742,13 @@ O si prefieres, en el Combo Familiar de 2 KG ($11) ¡el delivery te sale totalme
         if (s.status === 'debt') badge = '<span class="badge-debt px-2.5 py-0.5 rounded-full text-xs font-semibold">Debe Todo</span>';
         else if (s.status === 'partial') badge = '<span class="badge-partial px-2.5 py-0.5 rounded-full text-xs font-semibold">Incompleto</span>';
 
-        let deliveryLabel = '<span class="text-stone-500 text-xs">🏠 Casa</span>';
-        if (s.delivery === 'delivery_close') deliveryLabel = '<span class="text-amber-800 bg-amber-50 px-2 py-0.5 rounded text-[11px] font-medium">🛵 Delivery (+$1.5)</span>';
-        if (s.delivery === 'delivery_far') deliveryLabel = '<span class="text-amber-800 bg-amber-50 px-2 py-0.5 rounded text-[11px] font-medium">🛵 Delivery (+$2.5)</span>';
-        if (s.delivery === 'delivery_free') deliveryLabel = '<span class="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded text-[11px] font-medium">🎁 Promo Gratis</span>';
-
         return `
           <tr class="hover:bg-stone-50 transition">
             <td class="p-3 font-semibold text-stone-800">
               ${s.client}
               ${s.phone ? `<span class="block text-[11px] text-stone-400 font-normal">📱 ${s.phone}</span>` : ''}
             </td>
-            <td class="p-3 text-center font-bold text-stone-700">${s.product || '1 Pote 1 KG'}</td>
-            <td class="p-3">${deliveryLabel}</td>
+            <td class="p-3 text-stone-700 text-xs">${s.product || 'Pote 1 KG'}</td>
             <td class="p-3 text-right font-medium text-stone-600">$${s.total.toFixed(2)}</td>
             <td class="p-3 text-right text-emerald-700 font-bold">$${s.paid.toFixed(2)}</td>
             <td class="p-3 text-right font-bold ${debt > 0 ? 'text-rose-600' : 'text-stone-300'}">
@@ -888,7 +784,7 @@ O si prefieres, en el Combo Familiar de 2 KG ($11) ¡el delivery te sale totalme
       } else if (potesPerSack >= 12) {
         msg += '🌾 Excelente rendimiento: el grano almidonado rindió más masa.';
       } else {
-        msg += '✅ Rendimiento estándar saludable.';
+        msg += '✅ Rendimiento estándar saludable (~9-10 kg/saco).';
       }
       document.getElementById('lot-yield-text').innerText = msg;
     }
@@ -994,9 +890,8 @@ O si prefieres, en el Combo Familiar de 2 KG ($11) ¡el delivery te sale totalme
       const totalPaidUSD = appData.sales.reduce((sum, s) => sum + s.paid, 0);
       const totalDebtUSD = totalSalesUSD - totalPaidUSD;
 
-      const costs = getUnitCosts();
-      const totalEstimatedCost = appData.sales.length * costs.total1kUSD;
-      const totalProfitUSD = totalPaidUSD - totalEstimatedCost;
+      // Ganancia realista promedio estimada: $1.25 por venta
+      const totalProfitUSD = totalPaidUSD - (appData.sales.length * 4.25);
 
       document.getElementById('kpi-sales-usd').innerText = `$${totalSalesUSD.toFixed(2)}`;
       document.getElementById('kpi-sales-bs').innerText = `Bs ${(totalSalesUSD * appData.rateBCV).toLocaleString('es-VE', { minimumFractionDigits: 2 })}`;
@@ -1004,12 +899,10 @@ O si prefieres, en el Combo Familiar de 2 KG ($11) ¡el delivery te sale totalme
       document.getElementById('kpi-debts-usd').innerText = `$${totalDebtUSD.toFixed(2)}`;
       document.getElementById('kpi-debts-bs').innerText = `Bs ${(totalDebtUSD * appData.rateBCV).toLocaleString('es-VE', { minimumFractionDigits: 2 })}`;
 
-      document.getElementById('kpi-delivered-potes').innerText = `${appData.sales.length} pedidos`;
+      document.getElementById('kpi-delivered-potes').innerText = `${appData.sales.length} entregas`;
 
-      document.getElementById('kpi-cost-pote').innerText = `$${costs.total1kUSD.toFixed(2)}`;
-
-      document.getElementById('kpi-profit-usd').innerText = `$${totalProfitUSD.toFixed(2)}`;
-      document.getElementById('kpi-profit-bs').innerText = `Bs ${(totalProfitUSD * appData.rateBCV).toLocaleString('es-VE', { minimumFractionDigits: 2 })}`;
+      document.getElementById('kpi-profit-usd').innerText = `$${Math.max(0, totalProfitUSD).toFixed(2)}`;
+      document.getElementById('kpi-profit-bs').innerText = `Bs ${(Math.max(0, totalProfitUSD) * appData.rateBCV).toLocaleString('es-VE', { minimumFractionDigits: 2 })}`;
 
       renderSalesTable();
       renderLotsTable();
