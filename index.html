@@ -8,6 +8,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Firebase SDK (Compat) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
   <style>
     body { font-family: 'Plus Jakarta Sans', sans-serif; }
     .badge-paid { background-color: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; }
@@ -27,7 +32,11 @@
         <div>
           <div class="flex items-center gap-2">
             <h1 class="text-lg font-bold tracking-tight text-white">Chpa Manager</h1>
-            <span class="text-[10px] bg-stone-800 text-amber-300 font-semibold px-2 py-0.5 rounded-full border border-stone-700">v3.0 • Producción Real</span>
+            <!-- Indicador de Sincronización Firebase -->
+            <button onclick="switchTab('configuracion')" id="firebase-status-badge" class="text-[10px] bg-amber-900/60 text-amber-300 font-semibold px-2.5 py-0.5 rounded-full border border-amber-700 flex items-center gap-1 hover:bg-amber-800 transition">
+              <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+              <span id="firebase-status-text">Modo Local (Conectar Nube)</span>
+            </button>
           </div>
           <p class="text-xs text-stone-400">Control de Molienda, Preparación de Potes & Ganancia Real</p>
         </div>
@@ -47,7 +56,7 @@
 
   <main class="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-6">
 
-    <!-- KPI Cards (Resumen Rápido) -->
+    <!-- KPI Cards -->
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
       <div class="bg-white p-4 rounded-xl shadow-sm border border-stone-200">
         <div class="text-xs font-semibold text-stone-500 uppercase tracking-wider">Ventas Totales ($)</div>
@@ -77,7 +86,7 @@
       </div>
     </div>
 
-    <!-- Navegación por pestañas (Estilo sólido, texto SIEMPRE visible) -->
+    <!-- Navegación por pestañas -->
     <div class="flex flex-wrap gap-2 border-b border-stone-300 pb-3">
       <button onclick="switchTab('ventas')" id="tab-btn-ventas" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition shadow-sm bg-stone-900 text-white">
         💰 Ventas & Cobranzas
@@ -91,8 +100,8 @@
       <button onclick="switchTab('claridad-ganancias')" id="tab-btn-claridad-ganancias" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition bg-white text-stone-700 border border-stone-200 hover:bg-stone-50">
         💵 Dónde está la Ganancia
       </button>
-      <button onclick="switchTab('configuracion')" id="tab-btn-configuracion" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition bg-white text-stone-700 border border-stone-200 hover:bg-stone-50">
-        ⚙️ Respaldos & Git
+      <button onclick="switchTab('configuracion')" id="tab-btn-configuracion" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition bg-white text-stone-700 border border-stone-200 hover:bg-stone-50 flex items-center gap-1.5">
+        <span>☁️</span> Sincronización Firebase
       </button>
     </div>
 
@@ -175,7 +184,7 @@
 
     </div>
 
-    <!-- TAB 2: MOLIENDA & PREPARACIÓN (TU FLUJO REAL EN 2 FASES) -->
+    <!-- TAB 2: MOLIENDA & PREPARACIÓN -->
     <div id="tab-produccion" class="hidden space-y-6">
       
       <!-- FASE 1: MOLER EL SACO -->
@@ -276,7 +285,7 @@
 
     </div>
 
-    <!-- TAB 3: INVENTARIO CON MODIFICACIÓN DIRECTA (SIN FLOJERA DE BOTONES) -->
+    <!-- TAB 3: INVENTARIO & STOCK -->
     <div id="tab-inventario" class="hidden space-y-6">
       
       <!-- Entrada rápida de compra -->
@@ -296,8 +305,8 @@
               <option value="azucar">🍬 Azúcar Refinada (Gramos)</option>
               <option value="leche">🥛 Leche en Polvo (Gramos)</option>
               <option value="harina">🌾 Harina PAN / Trigo (Gramos)</option>
-              <option value="potes_500g">🥡 Potes Chinos 500g (Unidades)</option>
-              <option value="potes_1k">🥣 Potes 1 KG con Tapa (Unidades)</option>
+              <option value="potes_500g_vacios">🥡 Potes Chinos Vacíos (Unidades)</option>
+              <option value="potes_1k_vacios">🥣 Potes 1 KG Vacíos (Unidades)</option>
             </select>
           </div>
           <div>
@@ -313,21 +322,21 @@
         </div>
       </div>
 
-      <!-- Tarjetas de Inventario con Edición Directa del Número -->
+      <!-- Tarjetas de Inventario -->
       <div class="bg-white p-5 rounded-xl shadow-sm border border-stone-200">
         <div class="flex items-center justify-between mb-3">
           <h3 class="text-sm font-bold text-stone-800">Existencias Actuales (Puedes escribir la cantidad exacta)</h3>
-          <span class="text-xs text-stone-500">Haz clic en el número para editarlo directamente</span>
+          <span class="text-xs text-stone-500">Toca el número para editarlo directamente</span>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="inventory-grid">
-          <!-- Renderizado dinámico -->
+          <!-- Render dinámico -->
         </div>
       </div>
 
     </div>
 
-    <!-- TAB 4: DÓNDE ESTÁ LA GANANCIA (EXPLICACIÓN ULTRA CLARA) -->
+    <!-- TAB 4: DÓNDE ESTÁ LA GANANCIA -->
     <div id="tab-claridad-ganancias" class="hidden space-y-6">
       
       <div class="bg-white p-5 rounded-xl shadow-sm border border-stone-200">
@@ -347,7 +356,6 @@
               <span class="text-xs bg-stone-200 text-stone-800 font-bold px-2.5 py-0.5 rounded-full">Individual</span>
             </div>
 
-            <!-- Escenario A: Retirando en Casa -->
             <div class="p-3 bg-white rounded-xl border border-stone-200 space-y-1.5 text-xs">
               <div class="font-bold text-stone-800 text-sm">Escenario 1: El cliente retira en tu casa</div>
               <div class="flex justify-between text-stone-600"><span>Cobras al cliente:</span><span class="font-bold text-stone-900">$3.00</span></div>
@@ -359,7 +367,6 @@
               </div>
             </div>
 
-            <!-- Escenario B: Con Delivery -->
             <div class="p-3 bg-white rounded-xl border border-stone-200 space-y-1.5 text-xs">
               <div class="font-bold text-stone-800 text-sm">Escenario 2: Llevándoselo a su puerta</div>
               <div class="flex justify-between text-stone-600"><span>Cobras al cliente (Delivery Incluido):</span><span class="font-bold text-stone-900">$4.50</span></div>
@@ -383,7 +390,6 @@
               <span class="text-xs bg-amber-100 text-amber-900 font-bold px-2.5 py-0.5 rounded-full">El Más Vendido</span>
             </div>
 
-            <!-- Escenario A: Retirando en Casa -->
             <div class="p-3 bg-stone-50 rounded-xl border border-stone-200 space-y-1.5 text-xs">
               <div class="font-bold text-stone-800 text-sm">Escenario 1: El cliente retira en tu casa</div>
               <div class="flex justify-between text-stone-600"><span>Cobras al cliente:</span><span class="font-bold text-stone-900">$5.00</span></div>
@@ -395,7 +401,6 @@
               </div>
             </div>
 
-            <!-- Escenario B: Con Delivery -->
             <div class="p-3 bg-stone-50 rounded-xl border border-stone-200 space-y-1.5 text-xs">
               <div class="font-bold text-stone-800 text-sm">Escenario 2: Llevándoselo a su puerta</div>
               <div class="flex justify-between text-stone-600"><span>Cobras al cliente (Delivery Incluido):</span><span class="font-bold text-stone-900">$6.50</span></div>
@@ -429,42 +434,86 @@
 
     </div>
 
-    <!-- TAB 5: CONFIGURACIÓN & GIT -->
+    <!-- TAB 5: SINCRONIZACIÓN FIREBASE & CONFIGURACIÓN -->
     <div id="tab-configuracion" class="hidden space-y-6">
+      
+      <!-- Panel de Conexión a Firebase -->
       <div class="bg-white p-5 rounded-xl shadow-sm border border-stone-200">
-        <h2 class="text-sm font-bold text-stone-800 mb-2 flex items-center gap-2">
-          <span>⚙️</span> Copias de Seguridad & Sincronización
-        </h2>
-        <p class="text-xs text-stone-500 mb-4">Descarga una copia de tus ventas y materias primas en cualquier momento.</p>
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="text-base font-bold text-stone-900 flex items-center gap-2">
+            <span>☁️</span> Sincronización en la Nube con Google Firebase
+          </h2>
+          <span id="firebase-card-badge" class="text-xs bg-amber-100 text-amber-800 font-bold px-2.5 py-0.5 rounded-full">Pendiente Conectar</span>
+        </div>
+        <p class="text-xs text-stone-600 mb-4 leading-relaxed">
+          Con Firebase, tú y tu novia pueden abrir la app desde sus teléfonos y ver exactamente las mismas ventas e inventario al segundo en tiempo real.
+        </p>
 
-        <div class="flex flex-wrap gap-3 mb-6">
-          <button onclick="exportData()" class="bg-stone-900 hover:bg-stone-800 text-white font-semibold py-2 px-4 rounded-lg text-sm transition">
-            📥 Descargar Copia de Respaldo (JSON)
+        <!-- Formulario de Configuración Firebase -->
+        <div class="p-4 rounded-xl bg-stone-50 border border-stone-200 space-y-3">
+          <label class="block text-xs font-bold text-stone-800 uppercase tracking-wider">
+            Pega aquí tu Configuración de Firebase (firebaseConfig):
+          </label>
+          <textarea id="firebase-config-input" rows="6" placeholder='Pega aquí el código que te da Firebase, ejemplo:
+{
+  apiKey: "AIzaSy...",
+  authDomain: "cachapa-app.firebaseapp.com",
+  projectId: "cachapa-app",
+  storageBucket: "cachapa-app.appspot.com",
+  messagingSenderId: "...",
+  appId: "..."
+}' class="w-full border border-stone-300 rounded-lg p-3 text-xs font-mono bg-white outline-none focus:border-stone-600 text-stone-800"></textarea>
+
+          <div class="flex flex-wrap gap-2">
+            <button onclick="saveFirebaseCredentials()" class="bg-stone-900 hover:bg-stone-800 text-white font-bold py-2 px-4 rounded-lg text-xs transition shadow-sm">
+              🚀 Conectar y Sincronizar en Tiempo Real
+            </button>
+            <button onclick="disconnectFirebase()" class="bg-stone-200 hover:bg-stone-300 text-stone-700 font-semibold py-2 px-3 rounded-lg text-xs transition">
+              Desconectar
+            </button>
+          </div>
+        </div>
+
+        <!-- Instrucciones paso a paso para crear Firebase gratis -->
+        <div class="mt-5 border-t border-stone-200 pt-4 text-xs text-stone-600 space-y-2">
+          <h4 class="font-bold text-stone-800 text-xs uppercase tracking-wider">¿Cómo obtener tu Firebase gratis en 2 minutos?</h4>
+          <ol class="list-decimal list-inside space-y-1 text-stone-600 pl-1">
+            <li>Entra a <strong><a href="https://console.firebase.google.com" target="_blank" class="text-amber-700 underline font-semibold">console.firebase.google.com</a></strong> con tu cuenta de Google.</li>
+            <li>Haz clic en <strong>"Crear un proyecto"</strong> y ponle de nombre: <code class="bg-stone-100 px-1 py-0.5 rounded">Cachapa</code>.</li>
+            <li>En el menú de la izquierda ve a <strong>Compilación &gt; Firestore Database</strong> y dale a <strong>"Crear base de datos"</strong> (Elige modo de prueba).</li>
+            <li>Ve a la rueda de configuración ⚙️ arriba a la izquierda &gt; <strong>Configuración del proyecto</strong>.</li>
+            <li>Baja hasta "Tus apps", toca el icono de web <strong>&lt;/&gt;</strong> y copia el cuadrito que dice <code class="bg-stone-100 px-1 py-0.5 rounded">const firebaseConfig = { ... }</code>.</li>
+            <li>¡Lo pegas arriba y listo! Ya estarán conectados tú y tu novia al mismo proyecto.</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- Respaldos Manuales -->
+      <div class="bg-white p-5 rounded-xl shadow-sm border border-stone-200">
+        <h3 class="text-sm font-bold text-stone-800 mb-2">Copia de Seguridad Manual</h3>
+        <p class="text-xs text-stone-500 mb-4">También puedes descargar o restaurar un respaldo en archivo JSON cuando quieras.</p>
+
+        <div class="flex flex-wrap gap-3">
+          <button onclick="exportData()" class="bg-stone-900 hover:bg-stone-800 text-white font-semibold py-2 px-4 rounded-lg text-xs transition">
+            📥 Descargar Copia (JSON)
           </button>
           
-          <label class="bg-stone-100 hover:bg-stone-200 text-stone-800 font-semibold py-2 px-4 rounded-lg text-sm transition cursor-pointer border border-stone-300">
-            📤 Restaurar Respaldo
+          <label class="bg-stone-100 hover:bg-stone-200 text-stone-800 font-semibold py-2 px-4 rounded-lg text-xs transition cursor-pointer border border-stone-300">
+            📤 Restaurar Copia
             <input type="file" id="import-file" class="hidden" accept=".json" onchange="importData(event)">
           </label>
 
-          <button onclick="resetToInitialData()" class="bg-rose-50 hover:bg-rose-100 text-rose-700 font-semibold py-2 px-4 rounded-lg text-sm transition border border-rose-200">
+          <button onclick="resetToInitialData()" class="bg-rose-50 hover:bg-rose-100 text-rose-700 font-semibold py-2 px-4 rounded-lg text-xs transition border border-rose-200">
             ⚠️ Restaurar Datos Base
           </button>
         </div>
-
-        <div class="border-t border-stone-200 pt-5">
-          <h3 class="text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">Sincronización con GitHub</h3>
-          <p class="text-xs text-stone-600 mb-3">
-            Repositorio conectado: <a href="https://github.com/Ronny390/Cachapa" target="_blank" class="text-amber-700 font-semibold underline">https://github.com/Ronny390/Cachapa</a>
-          </p>
-        </div>
       </div>
+
     </div>
 
   </main>
 
   <script>
-    // Initial Seed Data enriquecida con los dos pasos de producción
     const INITIAL_DATA = {
       rateBCV: 477.00,
       inventory: [
@@ -508,7 +557,6 @@
 
     let appData = JSON.parse(localStorage.getItem('chpa_app_data')) || INITIAL_DATA;
 
-    // Validación y migración de inventario si venía de versión vieja
     function ensureInventoryIntegrity() {
       if (!appData.inventory || appData.inventory.length < 9) {
         appData.inventory = JSON.parse(JSON.stringify(INITIAL_DATA.inventory));
@@ -516,12 +564,119 @@
     }
     ensureInventoryIntegrity();
 
+    // --- FIREBASE SYNC ENGINE ---
+    let db = null;
+    let isRemoteUpdate = false;
+
+    function initFirebaseEngine() {
+      const savedConfig = localStorage.getItem('chpa_firebase_config');
+      if (savedConfig) {
+        try {
+          const config = JSON.parse(savedConfig);
+          if (!firebase.apps.length) {
+            firebase.initializeApp(config);
+          }
+          db = firebase.firestore();
+
+          // Escuchar cambios en vivo desde la nube
+          db.collection('negocio_chpa').doc('datos_en_vivo').onSnapshot(doc => {
+            if (doc.exists) {
+              const remote = doc.data();
+              if (remote && remote.sales) {
+                isRemoteUpdate = true;
+                appData = remote;
+                localStorage.setItem('chpa_app_data', JSON.stringify(appData));
+                updateUI();
+                isRemoteUpdate = false;
+              }
+            } else {
+              // Primera vez: subir datos actuales a Firebase
+              db.collection('negocio_chpa').doc('datos_en_vivo').set(appData);
+            }
+            setFirebaseStatus(true);
+          }, err => {
+            console.error('Error escuchando Firestore:', err);
+            setFirebaseStatus(false);
+          });
+
+          document.getElementById('firebase-config-input').value = JSON.stringify(config, null, 2);
+        } catch (e) {
+          console.error('Error parseando config de Firebase:', e);
+          setFirebaseStatus(false);
+        }
+      } else {
+        setFirebaseStatus(false);
+      }
+    }
+
+    function setFirebaseStatus(connected) {
+      const badge = document.getElementById('firebase-status-badge');
+      const text = document.getElementById('firebase-status-text');
+      const cardBadge = document.getElementById('firebase-card-badge');
+
+      if (connected) {
+        badge.className = "text-[10px] bg-emerald-900/60 text-emerald-300 font-semibold px-2.5 py-0.5 rounded-full border border-emerald-700 flex items-center gap-1";
+        text.innerText = "Nube Conectada (En Vivo)";
+        if (cardBadge) {
+          cardBadge.className = "text-xs bg-emerald-100 text-emerald-800 font-bold px-2.5 py-0.5 rounded-full";
+          cardBadge.innerText = "🟢 Conectado & Sincronizado";
+        }
+      } else {
+        badge.className = "text-[10px] bg-amber-900/60 text-amber-300 font-semibold px-2.5 py-0.5 rounded-full border border-amber-700 flex items-center gap-1 hover:bg-amber-800 transition";
+        text.innerText = "Modo Local (Conectar Nube)";
+        if (cardBadge) {
+          cardBadge.className = "text-xs bg-amber-100 text-amber-800 font-bold px-2.5 py-0.5 rounded-full";
+          cardBadge.innerText = "Pendiente Conectar";
+        }
+      }
+    }
+
+    function saveFirebaseCredentials() {
+      let raw = document.getElementById('firebase-config-input').value.trim();
+      if (!raw) {
+        alert('Por favor pega la configuración que te da Firebase');
+        return;
+      }
+
+      try {
+        // Limpiar si el usuario copió "const firebaseConfig = { ... };"
+        if (raw.includes('{')) {
+          raw = raw.substring(raw.indexOf('{'), raw.lastIndexOf('}') + 1);
+        }
+        // Normalizar comillas si vinieron como objeto JS
+        const normalized = raw
+          .replace(/([a-zA-Z0-9_]+)\s*:/g, '"$1":')
+          .replace(/'/g, '"');
+
+        const parsed = JSON.parse(normalized);
+        localStorage.setItem('chpa_firebase_config', JSON.stringify(parsed));
+        alert('¡Configuración guardada! Conectando a Firebase...');
+        location.reload();
+      } catch (err) {
+        alert('Error al leer el código. Asegúrate de copiar solo las llaves { ... } con la configuración.');
+      }
+    }
+
+    function disconnectFirebase() {
+      if (confirm('¿Desconectar la sincronización de Firebase en este dispositivo?')) {
+        localStorage.removeItem('chpa_firebase_config');
+        alert('Desconectado. Volviendo a modo local.');
+        location.reload();
+      }
+    }
+
     function saveData() {
       localStorage.setItem('chpa_app_data', JSON.stringify(appData));
       updateUI();
+
+      // Si Firebase está conectado y el cambio fue local, subir a la nube
+      if (db && !isRemoteUpdate) {
+        db.collection('negocio_chpa').doc('datos_en_vivo').set(appData)
+          .catch(err => console.error('Error guardando en Firebase:', err));
+      }
     }
 
-    // SwitchTab Infalible (Sin texto blanco sobre fondo blanco)
+    // SwitchTab Infalible
     function switchTab(tabName) {
       const allTabs = ['ventas', 'produccion', 'inventario', 'claridad-ganancias', 'configuracion'];
       allTabs.forEach(t => {
@@ -568,11 +723,9 @@
         return;
       }
 
-      // Descontar sacos
       const sackInv = appData.inventory.find(i => i.id === 'jojoto');
       if (sackInv) sackInv.qty = Math.max(0, sackInv.qty - sacks);
 
-      // Sumar bolsas crudas al freezer
       const rawBagsInv = appData.inventory.find(i => i.id === 'bolsas_crudas');
       if (rawBagsInv) rawBagsInv.qty += bags;
 
@@ -613,7 +766,6 @@
       const reqMilk = bags * 35;
       const reqFlour = bags * 50;
 
-      // Descontar insumos
       rawBagsInv.qty -= bags;
       const sugarInv = appData.inventory.find(i => i.id === 'azucar');
       if (sugarInv) sugarInv.qty = Math.max(0, sugarInv.qty - reqSugar);
@@ -624,7 +776,6 @@
       const flourInv = appData.inventory.find(i => i.id === 'harina');
       if (flourInv) flourInv.qty = Math.max(0, flourInv.qty - reqFlour);
 
-      // Sumar producto terminado y descontar envases vacíos
       if (packType === 'potes_500g') {
         const potes = bags * 3;
         const potesListos = appData.inventory.find(i => i.id === 'potes_500g_listos');
@@ -646,7 +797,7 @@
       saveData();
     }
 
-    // INVENTARIO DIRECTO: Suma rápida
+    // INVENTARIO DIRECTO
     function addStockQuick() {
       const itemId = document.getElementById('inv-quick-item').value;
       const amount = parseFloat(document.getElementById('inv-quick-amount').value) || 0;
@@ -744,7 +895,6 @@
 
       appData.sales.unshift(newSale);
       
-      // Descontar pote vendido del inventario si hay disponible
       if (productSelect.value.includes('500g')) {
         const p500 = appData.inventory.find(i => i.id === 'potes_500g_listos');
         if (p500) p500.qty = Math.max(0, p500.qty - 1);
@@ -862,7 +1012,6 @@
       const totalPaidUSD = appData.sales.reduce((sum, s) => sum + s.paid, 0);
       const totalDebtUSD = totalSalesUSD - totalPaidUSD;
 
-      // Ganancia limpia promedio real de $1.25 por pedido
       const totalProfitUSD = appData.sales.filter(s => s.status === 'paid').length * 1.25;
 
       document.getElementById('kpi-sales-usd').innerText = `$${totalSalesUSD.toFixed(2)}`;
@@ -871,7 +1020,6 @@
       document.getElementById('kpi-debts-usd').innerText = `$${totalDebtUSD.toFixed(2)}`;
       document.getElementById('kpi-debts-bs').innerText = `Bs ${(totalDebtUSD * appData.rateBCV).toLocaleString('es-VE', { minimumFractionDigits: 2 })}`;
 
-      // Potes listos en freezer
       const p500 = appData.inventory.find(i => i.id === 'potes_500g_listos');
       const p1k = appData.inventory.find(i => i.id === 'potes_1k_listos');
       const rawBags = appData.inventory.find(i => i.id === 'bolsas_crudas');
@@ -925,6 +1073,7 @@
       calculateRawCornBags();
       calculatePreparationRecipe();
       applyProductSelection();
+      initFirebaseEngine();
       updateUI();
     });
   </script>
