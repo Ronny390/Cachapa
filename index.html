@@ -15,9 +15,9 @@
     .badge-partial { background-color: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
   </style>
 </head>
-<body class="bg-stone-100/70 text-stone-800 min-h-screen antialiased">
+<body class="bg-stone-100 text-stone-800 min-h-screen antialiased">
 
-  <!-- Header Elegante & Suave -->
+  <!-- Header Elegante & Visible -->
   <header class="bg-stone-900 text-stone-100 shadow-md sticky top-0 z-30 border-b border-stone-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap justify-between items-center gap-3">
       <div class="flex items-center gap-3">
@@ -27,18 +27,18 @@
         <div>
           <div class="flex items-center gap-2">
             <h1 class="text-lg font-bold tracking-tight text-white">Chpa Manager</h1>
-            <span class="text-[10px] bg-stone-800 text-amber-300 font-semibold px-2 py-0.5 rounded-full border border-stone-700">v2.4 • Delivery Incluido</span>
+            <span class="text-[10px] bg-stone-800 text-amber-300 font-semibold px-2 py-0.5 rounded-full border border-stone-700">v3.0 • Producción Real</span>
           </div>
-          <p class="text-xs text-stone-400">Precios Finales al Cliente • Ganancia Mínima de $1 a $2 Asegurada</p>
+          <p class="text-xs text-stone-400">Control de Molienda, Preparación de Potes & Ganancia Real</p>
         </div>
       </div>
       
-      <!-- Tasa de Cambio rápida con diseño neutro -->
-      <div class="flex items-center gap-2 bg-stone-800/90 px-3 py-1.5 rounded-xl border border-stone-700 text-sm shadow-sm">
+      <!-- Tasa de Cambio rápida -->
+      <div class="flex items-center gap-2 bg-stone-800 px-3 py-1.5 rounded-xl border border-stone-700 text-sm shadow-sm">
         <span class="text-xs font-medium text-stone-300">Tasa BCV:</span>
         <div class="flex items-center gap-1">
           <span class="text-xs text-stone-400">Bs/$</span>
-          <input id="global-rate" type="number" step="0.01" class="w-20 bg-stone-900 text-amber-300 font-bold px-2 py-0.5 rounded border border-stone-700 text-right focus:bg-stone-950 focus:border-amber-400 outline-none transition" value="477.00" onchange="updateRate(this.value)">
+          <input id="global-rate" type="number" step="0.01" class="w-20 bg-stone-950 text-amber-300 font-bold px-2 py-0.5 rounded border border-stone-700 text-right focus:border-amber-400 outline-none transition" value="477.00" onchange="updateRate(this.value)">
         </div>
         <button onclick="refreshCalculations()" title="Recalcular todo" class="hover:bg-stone-700 p-1 rounded transition text-stone-300 text-xs">🔄</button>
       </div>
@@ -47,60 +47,51 @@
 
   <main class="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-6">
 
-    <!-- KPI Cards -->
-    <div class="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
-      <div class="bg-white p-4 rounded-xl shadow-sm border border-stone-200/80">
-        <div class="text-xs font-medium text-stone-500 uppercase tracking-wider">Ventas Totales ($)</div>
-        <div class="text-2xl font-bold text-stone-900 mt-1" id="kpi-sales-usd">$0.00</div>
+    <!-- KPI Cards (Resumen Rápido) -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+      <div class="bg-white p-4 rounded-xl shadow-sm border border-stone-200">
+        <div class="text-xs font-semibold text-stone-500 uppercase tracking-wider">Ventas Totales ($)</div>
+        <div class="text-2xl font-extrabold text-stone-900 mt-1" id="kpi-sales-usd">$0.00</div>
         <div class="text-xs text-stone-400 mt-0.5" id="kpi-sales-bs">Bs 0.00</div>
       </div>
 
-      <div class="bg-white p-4 rounded-xl shadow-sm border border-stone-200/80">
-        <div class="text-xs font-medium text-stone-500 uppercase tracking-wider flex items-center justify-between">
-          <span>Por Cobrar</span>
+      <div class="bg-white p-4 rounded-xl shadow-sm border border-stone-200">
+        <div class="text-xs font-semibold text-stone-500 uppercase tracking-wider flex items-center justify-between">
+          <span>Por Cobrar (Fiados)</span>
           <span class="w-2 h-2 rounded-full bg-rose-500"></span>
         </div>
-        <div class="text-2xl font-bold text-rose-600 mt-1" id="kpi-debts-usd">$0.00</div>
+        <div class="text-2xl font-extrabold text-rose-600 mt-1" id="kpi-debts-usd">$0.00</div>
         <div class="text-xs text-rose-400 mt-0.5" id="kpi-debts-bs">Bs 0.00</div>
       </div>
 
-      <div class="bg-white p-4 rounded-xl shadow-sm border border-stone-200/80">
-        <div class="text-xs font-medium text-stone-500 uppercase tracking-wider">Pedidos Realizados</div>
-        <div class="text-2xl font-bold text-stone-800 mt-1" id="kpi-delivered-potes">0</div>
-        <div class="text-xs text-stone-400 mt-0.5">Historial acumulado</div>
+      <div class="bg-white p-4 rounded-xl shadow-sm border border-stone-200">
+        <div class="text-xs font-semibold text-stone-500 uppercase tracking-wider">En el Congelador</div>
+        <div class="text-2xl font-extrabold text-amber-700 mt-1" id="kpi-freezer-stock">0 Potes</div>
+        <div class="text-xs text-stone-500 mt-0.5" id="kpi-raw-bags">0 bolsas crudas de 1.5kg</div>
       </div>
 
-      <div class="bg-white p-4 rounded-xl shadow-sm border border-stone-200/80">
-        <div class="text-xs font-medium text-stone-500 uppercase tracking-wider">Ganancia por Pote</div>
-        <div class="text-2xl font-bold text-emerald-700 mt-1" id="kpi-profit-unit">+$1.00 a $2.00</div>
-        <div class="text-xs text-emerald-600 font-semibold mt-0.5">Meta asegurada ✅</div>
-      </div>
-
-      <div class="bg-white p-4 rounded-xl shadow-sm border border-stone-200/80 col-span-2 lg:col-span-1">
-        <div class="text-xs font-medium text-stone-500 uppercase tracking-wider">Ganancia Neta Real</div>
-        <div class="text-2xl font-bold text-emerald-700 mt-1" id="kpi-profit-usd">$0.00</div>
+      <div class="bg-white p-4 rounded-xl shadow-sm border border-stone-200">
+        <div class="text-xs font-semibold text-stone-500 uppercase tracking-wider">Ganancia Neta Real</div>
+        <div class="text-2xl font-extrabold text-emerald-700 mt-1" id="kpi-profit-usd">$0.00</div>
         <div class="text-xs text-emerald-600 mt-0.5" id="kpi-profit-bs">Bs 0.00</div>
       </div>
     </div>
 
-    <!-- Navegación por pestañas -->
-    <div class="flex flex-wrap gap-2 border-b border-stone-300 pb-2">
-      <button onclick="switchTab('ventas')" id="tab-btn-ventas" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold transition bg-stone-900 text-white shadow-sm">
+    <!-- Navegación por pestañas (Estilo sólido, texto SIEMPRE visible) -->
+    <div class="flex flex-wrap gap-2 border-b border-stone-300 pb-3">
+      <button onclick="switchTab('ventas')" id="tab-btn-ventas" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition shadow-sm bg-stone-900 text-white">
         💰 Ventas & Cobranzas
       </button>
-      <button onclick="switchTab('combos')" id="tab-btn-combos" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold transition bg-white text-stone-600 hover:bg-stone-50 border border-stone-200">
-        ⭐ Precios (Delivery Incluido)
+      <button onclick="switchTab('produccion')" id="tab-btn-produccion" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition bg-white text-stone-700 border border-stone-200 hover:bg-stone-50">
+        🌽 Molienda & Preparación
       </button>
-      <button onclick="switchTab('costos')" id="tab-btn-costos" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold transition bg-white text-stone-600 hover:bg-stone-50 border border-stone-200">
-        ⚖️ Costos con 18 Potes/Saco
+      <button onclick="switchTab('inventario')" id="tab-btn-inventario" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition bg-white text-stone-700 border border-stone-200 hover:bg-stone-50">
+        📦 Inventario & Stock
       </button>
-      <button onclick="switchTab('produccion')" id="tab-btn-produccion" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold transition bg-white text-stone-600 hover:bg-stone-50 border border-stone-200">
-        🌽 Lotes & Molienda
+      <button onclick="switchTab('claridad-ganancias')" id="tab-btn-claridad-ganancias" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition bg-white text-stone-700 border border-stone-200 hover:bg-stone-50">
+        💵 Dónde está la Ganancia
       </button>
-      <button onclick="switchTab('inventario')" id="tab-btn-inventario" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold transition bg-white text-stone-600 hover:bg-stone-50 border border-stone-200">
-        📦 Inventario
-      </button>
-      <button onclick="switchTab('configuracion')" id="tab-btn-configuracion" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold transition bg-white text-stone-600 hover:bg-stone-50 border border-stone-200">
+      <button onclick="switchTab('configuracion')" id="tab-btn-configuracion" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition bg-white text-stone-700 border border-stone-200 hover:bg-stone-50">
         ⚙️ Respaldos & Git
       </button>
     </div>
@@ -111,7 +102,7 @@
       <!-- Formulario de Venta -->
       <div class="bg-white p-5 rounded-xl shadow-sm border border-stone-200">
         <h2 class="text-sm font-bold text-stone-800 mb-3 flex items-center gap-2">
-          <span>➕</span> Registrar Venta con Precio Final al Cliente
+          <span>➕</span> Registrar Pedido de Cliente
         </h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
           <div>
@@ -123,14 +114,13 @@
             <input id="sale-phone" type="text" placeholder="0412..." class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:border-stone-600 outline-none">
           </div>
           <div>
-            <label class="block text-xs font-semibold text-stone-600 mb-1">Precio Anunciado (Con Delivery)</label>
+            <label class="block text-xs font-semibold text-stone-600 mb-1">Producto / Modalidad</label>
             <select id="sale-combo-select" class="w-full border border-stone-300 rounded-lg px-2 py-2 text-xs focus:border-stone-600 outline-none font-semibold text-stone-800" onchange="applyProductSelection()">
               <option value="pote_1kg_deliv" selected>Pote 1 KG con Delivery: $6.50</option>
               <option value="pote_500g_deliv">Pote 500g con Delivery: $4.50</option>
               <option value="combo_2kg_deliv">Combo 2 KG con Delivery: $11.00</option>
               <option value="pote_1kg_pickup">Pote 1 KG (Retiro en Casa): $5.00</option>
               <option value="pote_500g_pickup">Pote 500g (Retiro en Casa): $3.00</option>
-              <option value="custom">Otro Monto...</option>
             </select>
           </div>
           <div>
@@ -153,7 +143,7 @@
       <div class="bg-white rounded-xl shadow-sm border border-stone-200 overflow-hidden">
         <div class="p-4 bg-stone-50 border-b border-stone-200 flex flex-wrap justify-between items-center gap-3">
           <div class="flex items-center gap-2">
-            <h3 class="font-bold text-stone-800 text-sm">Historial de Ventas</h3>
+            <h3 class="font-bold text-stone-800 text-sm">Historial de Clientes y Deudores</h3>
             <span id="sales-count" class="text-xs bg-stone-200 text-stone-700 px-2.5 py-0.5 rounded-full font-semibold">0 registros</span>
           </div>
           <div class="flex items-center gap-2">
@@ -168,7 +158,7 @@
             <thead class="bg-stone-100 text-stone-600 text-xs uppercase font-semibold sticky top-0">
               <tr>
                 <th class="p-3">Cliente</th>
-                <th class="p-3">Producto / Modalidad</th>
+                <th class="p-3">Modalidad</th>
                 <th class="p-3 text-right">Total ($)</th>
                 <th class="p-3 text-right">Pagado ($)</th>
                 <th class="p-3 text-right">Faltante ($)</th>
@@ -177,7 +167,7 @@
               </tr>
             </thead>
             <tbody id="sales-table-body" class="divide-y divide-stone-100">
-              <!-- Renderizado dinámico -->
+              <!-- Render dinámico -->
             </tbody>
           </table>
         </div>
@@ -185,309 +175,267 @@
 
     </div>
 
-    <!-- TAB 2: PRECIOS OFICIALES CON DELIVERY INCLUIDO -->
-    <div id="tab-combos" class="hidden space-y-6">
-      
-      <div class="bg-white p-5 rounded-xl shadow-sm border border-stone-200">
-        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-          <div>
-            <h2 class="text-base font-bold text-stone-800 flex items-center gap-2">
-              <span>⭐</span> Menú Comercial: Precios con Delivery Incluido (Lo que ve el cliente)
-            </h2>
-            <p class="text-xs text-stone-500">El cliente ve el precio final todo incluido. Quien retira en casa recibe descuento.</p>
-          </div>
-          <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-3 py-1 rounded-full border border-emerald-200">Cero Fricción al Vender</span>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs mt-4">
-          
-          <!-- Pote 500g -->
-          <div class="p-4 rounded-xl border border-stone-200 bg-stone-50/50 flex flex-col justify-between space-y-3">
-            <div>
-              <span class="text-[10px] font-bold uppercase tracking-wider text-stone-400">Prueba / Pareja (500g)</span>
-              <h3 class="font-bold text-stone-800 text-sm mt-0.5">Pote 500g a tu Puerta</h3>
-              <p class="text-stone-500 mt-1 text-[11px]">Rinde 2 cachapas grandes. Listo en tu budare.</p>
-              
-              <div class="mt-3">
-                <span class="text-2xl font-extrabold text-stone-900">$4.50</span>
-                <span class="text-[10px] text-emerald-700 font-bold block">🛵 ¡DELIVERY INCLUIDO!</span>
-                <span class="text-[10px] text-stone-400 block mt-0.5">*(O solo $3.00 si retiras en casa)*</span>
-              </div>
-            </div>
-            <div class="border-t border-stone-200 pt-2 text-[11px] text-stone-600">
-              Costo total (masa + pote + viaje): <strong>$3.51</strong><br>
-              Tu ganancia neta asegurada: <strong class="text-emerald-700">+$0.99 limpio (~$1.00)</strong>
-            </div>
-          </div>
-
-          <!-- Pote 1 KG (Estrella) -->
-          <div class="p-4 rounded-xl border-2 border-stone-900 bg-white flex flex-col justify-between space-y-3 shadow-sm">
-            <div>
-              <div class="flex items-center justify-between">
-                <span class="text-[10px] font-bold uppercase tracking-wider text-amber-800">EL MÁS POPULAR</span>
-                <span class="text-[10px] bg-amber-100 text-amber-900 font-bold px-2 py-0.5 rounded">1 SOLO POTE</span>
-              </div>
-              <h3 class="font-bold text-stone-900 text-sm mt-0.5">Pote 1 KG a tu Puerta</h3>
-              <p class="text-stone-500 mt-1 text-[11px]">Rinde 4 cachapas grandes. El almuerzo o cena completo.</p>
-              
-              <div class="mt-3">
-                <span class="text-2xl font-extrabold text-stone-900">$6.50</span>
-                <span class="text-[10px] text-emerald-700 font-bold block">🛵 ¡DELIVERY INCLUIDO!</span>
-                <span class="text-[10px] text-stone-400 block mt-0.5">*(O solo $5.00 si retiras en casa)*</span>
-              </div>
-            </div>
-            <div class="border-t border-stone-200 pt-2 text-[11px] text-stone-600">
-              Costo total (masa 1kg + envase + viaje): <strong>$5.24</strong><br>
-              Tu ganancia neta asegurada: <strong class="text-emerald-700">+$1.26 a $1.76 limpios</strong>
-            </div>
-          </div>
-
-          <!-- Combo 2 KG Familiar -->
-          <div class="p-4 rounded-xl border-2 border-stone-900 bg-stone-900 text-white flex flex-col justify-between space-y-3 shadow-md">
-            <div>
-              <div class="flex items-center justify-between">
-                <span class="text-[10px] font-bold uppercase tracking-wider text-amber-300">⭐ COMBO FAMILIAR</span>
-                <span class="text-[9px] bg-amber-400 text-stone-950 font-extrabold px-1.5 py-0.5 rounded">MEJOR PRECIO</span>
-              </div>
-              <h3 class="font-bold text-white text-sm mt-0.5">Combo Familiar 2 KG (2 Potes)</h3>
-              <p class="text-stone-300 mt-1 text-[11px]">8 cachapas para toda la familia en el fin de semana.</p>
-              
-              <div class="mt-3">
-                <span class="text-2xl font-extrabold text-amber-300">$11.00</span>
-                <span class="text-[10px] text-emerald-400 font-bold block">🛵 ¡DELIVERY INCLUIDO!</span>
-                <span class="text-[9px] text-stone-400 block mt-0.5">*(Ahorras $2 frente a comprar por separado)*</span>
-              </div>
-            </div>
-            <div class="border-t border-stone-700 pt-2 text-[11px] text-stone-300">
-              Costo (masa 2kg + 2 potes + 1 viaje): <strong>~$8.98</strong><br>
-              Tu ganancia en 1 solo viaje: <strong class="text-emerald-400">+$2.02 limpios</strong>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- Mensajes para WhatsApp -->
-        <div class="mt-6 space-y-4">
-          <h4 class="font-bold text-stone-800 text-xs uppercase tracking-wider">
-            📲 Mensajes para Publicar y Responder (Delivery Incluido)
-          </h4>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            
-            <div class="p-3.5 rounded-xl bg-stone-50 border border-stone-200">
-              <div class="flex items-center justify-between mb-2">
-                <span class="font-bold text-stone-800 text-xs">Publicación para Estados de WhatsApp</span>
-                <button onclick="copyText('msg-status')" class="text-xs bg-stone-900 text-white px-2.5 py-1 rounded font-semibold hover:bg-stone-800">Copiar</button>
-              </div>
-              <pre id="msg-status" class="bg-white p-2.5 rounded border border-stone-200 text-stone-700 text-[11px] font-mono whitespace-pre-wrap">🌽 *MASA DE CACHAPA 100% MAÍZ NATURAL* 🌽
-¡Recién molida en casa! Sin conservantes químicos. Sabor criollo auténtico directo a tu budare.
-
-🥣 *Pote 500g (2 cachapas):* $4.50 con Delivery Incluido 🛵
-🥣 *Pote 1 KG (4 cachapas):* $6.50 con Delivery Incluido 🛵
-🔥 *COMBO FAMILIAR 2 KG:* $11.00 con Delivery Incluido 🛵💨
-
-*(Si retiras directo en casa tienes $1.50 de descuento)*
-
-Vienen congeladas listas para cocinar.
-¡Escríbeme al privado para apartar la tuya! 👇</pre>
-            </div>
-
-            <div class="p-3.5 rounded-xl bg-stone-50 border border-stone-200">
-              <div class="flex items-center justify-between mb-2">
-                <span class="font-bold text-stone-800 text-xs">Cuando un cliente te escribe para pedir</span>
-                <button onclick="copyText('msg-reply')" class="text-xs bg-stone-900 text-white px-2.5 py-1 rounded font-semibold hover:bg-stone-800">Copiar</button>
-              </div>
-              <pre id="msg-reply" class="bg-white p-2.5 rounded border border-stone-200 text-stone-700 text-[11px] font-mono whitespace-pre-wrap">¡Hola! Claro que sí, con mucho gusto. 
-Te sale en $6.50 el pote de 1 KG ya puesto en la puerta de tu casa con el delivery 🛵. 
-O si llevas el Combo Familiar de 2 KG te queda en solo $11.00. 
-
-¿Cuál te preparo para enviártelo?</pre>
-            </div>
-
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-
-    <!-- TAB 3: COSTOS REALES CON 18 POTES POR SACO -->
-    <div id="tab-costos" class="hidden space-y-6">
-      
-      <div class="bg-white p-5 rounded-xl shadow-sm border border-stone-200">
-        <h3 class="text-sm font-bold text-stone-800 mb-2 flex items-center gap-2">
-          <span>⚖️</span> Rendimiento Realista: Saco de Jojoto rindiendo 18 Potes (9 Kilos)
-        </h3>
-        <p class="text-xs text-stone-500 mb-4">Calculado sobre el rendimiento más común en Venezuela (maíz comercial estándar con merma normal).</p>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-          
-          <div class="p-4 rounded-xl border border-stone-200 bg-stone-50/50 space-y-2">
-            <span class="font-bold text-stone-800 text-sm block">1 Pote de 500g (Rinde 18 potes/saco)</span>
-            <div class="space-y-1 text-stone-600">
-              <div>• Maíz crudo (1/18 de saco de $25): <strong>$1.39</strong></div>
-              <div>• Leche en polvo, azúcar, harina, sal: <strong>$0.30</strong></div>
-              <div>• Pote chino con tapa: <strong>$0.33</strong></div>
-              <div>• Costo de fabricación: <strong>$2.02</strong></div>
-              <div>• Costo de gasolina / moto en viaje: <strong>$1.50</strong></div>
-              <div class="border-t border-stone-200 pt-1 text-stone-800">
-                <strong>Costo total puesto en su casa: $3.52</strong><br>
-                Precio cobrado: <strong>$4.50</strong><br>
-                <span class="text-emerald-700 font-bold">Tu ganancia limpia: +$0.98 (~$1.00 exacto) ✅</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="p-4 rounded-xl border-2 border-stone-900 bg-white space-y-2">
-            <span class="font-bold text-stone-900 text-sm block">1 Pote de 1 KG (Rinde 9 potes de 1kg/saco)</span>
-            <div class="space-y-1 text-stone-600">
-              <div>• Maíz crudo (1/9 de saco de $25): <strong>$2.78</strong></div>
-              <div>• Leche en polvo, azúcar, harina, sal: <strong>$0.60</strong></div>
-              <div>• 1 Solo Pote grande de 1 KG con tapa: <strong>$0.38</strong></div>
-              <div>• Costo de fabricación: <strong>$3.76</strong></div>
-              <div>• Costo de gasolina / moto en viaje: <strong>$1.50</strong></div>
-              <div class="border-t border-stone-200 pt-1 text-stone-800">
-                <strong>Costo total puesto en su casa: $5.26</strong><br>
-                Precio cobrado: <strong>$6.50</strong><br>
-                <span class="text-emerald-700 font-bold">Tu ganancia limpia: +$1.24 (o +$1.74 si cobras $7) ✅</span>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-        <div class="mt-4 p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-900">
-          <strong>Resultado por cada saco de jojoto que mueles:</strong> Te deja entre <strong>$15.00 y $18.00 de ganancia neta en tu bolsillo</strong>, asegurando tu sueldo y la reposición del próximo saco sin tocar tus ahorros.
-        </div>
-      </div>
-
-    </div>
-
-    <!-- TAB 4: LOTES & MOLIENDA -->
+    <!-- TAB 2: MOLIENDA & PREPARACIÓN (TU FLUJO REAL EN 2 FASES) -->
     <div id="tab-produccion" class="hidden space-y-6">
+      
+      <!-- FASE 1: MOLER EL SACO -->
       <div class="bg-white p-5 rounded-xl shadow-sm border border-stone-200">
-        <h2 class="text-base font-bold text-stone-800 mb-2 flex items-center gap-2">
-          <span>🌽</span> Registro de Molienda y Ajuste de Textura
-        </h2>
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="text-base font-bold text-stone-800 flex items-center gap-2">
+            <span>🌽</span> FASE 1: Moler Saco & Congelar con Sal en Bolsas de 1.500g
+          </h2>
+          <span class="text-xs bg-amber-100 text-amber-900 font-bold px-2.5 py-0.5 rounded-full">Paso 1: Almacenar</span>
+        </div>
         <p class="text-xs text-stone-500 mb-4">
-          La textura del jojoto cambia drásticamente la cantidad de potes. Selecciona cómo vino el maíz para recibir la recomendación exacta de agua y espesante.
+          Compraste el saco, lo desgranaste y moliste. Solo le echas sal y lo pesas para congelarlo en bolsas de 1.500g para que no se fermente.
         </p>
 
-        <div class="mb-5 p-4 rounded-xl bg-stone-50 border border-stone-200">
-          <label class="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">¿Cómo vino el maíz de este lote?</label>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <label class="flex items-start gap-3 p-3 rounded-lg border border-stone-300 bg-white cursor-pointer hover:border-amber-400 transition" onclick="selectCornState('tierno')">
-              <input type="radio" name="corn_state" value="tierno" id="radio-corn-tierno" class="mt-1 text-stone-900">
-              <div>
-                <span class="text-xs font-bold text-stone-800 block">💧 Muy Tierno (Lechoso)</span>
-                <span class="text-[11px] text-stone-500 leading-tight block mt-0.5">Mucha agua libre. Reduce agua a 50-100ml y añade ~70g harina.</span>
-              </div>
-            </label>
-
-            <label class="flex items-start gap-3 p-3 rounded-lg border-2 border-stone-800 bg-white cursor-pointer transition shadow-sm" onclick="selectCornState('optimo')">
-              <input type="radio" name="corn_state" value="optimo" id="radio-corn-optimo" checked class="mt-1 text-stone-900">
-              <div>
-                <span class="text-xs font-bold text-stone-800 block">🌽 Punto Ideal (Equilibrado)</span>
-                <span class="text-[11px] text-stone-500 leading-tight block mt-0.5">Grano tierno pero con cuerpo. Textura cremosa estándar.</span>
-              </div>
-            </label>
-
-            <label class="flex items-start gap-3 p-3 rounded-lg border border-stone-300 bg-white cursor-pointer hover:border-amber-400 transition" onclick="selectCornState('seco')">
-              <input type="radio" name="corn_state" value="seco" id="radio-corn-seco" class="mt-1 text-stone-900">
-              <div>
-                <span class="text-xs font-bold text-stone-800 block">🌾 Sazón / Seco (Almidonado)</span>
-                <span class="text-[11px] text-stone-500 leading-tight block mt-0.5">Molienda gruesa. El almidón absorbe agua y expande masa.</span>
-              </div>
-            </label>
-          </div>
-
-          <div id="corn-technical-advice" class="mt-3 p-3 rounded-lg bg-amber-50/70 border border-amber-200/80 text-xs text-stone-700 flex items-start gap-2">
-            <span class="text-amber-600 text-sm">💡</span>
-            <div id="corn-technical-text">
-              <strong>Consejo de Preparación:</strong> Con maíz en punto ideal, mantén la receta estándar (300ml de agua por cada bolsa de 1.500g de maíz y 50g de harina).
-            </div>
-          </div>
-        </div>
-        
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
           <div>
-            <label class="block text-xs font-semibold text-stone-600 mb-1">Nombre / # Lote</label>
-            <input id="lot-name" type="text" value="Lote 6" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-stone-600">
+            <label class="block text-xs font-semibold text-stone-600 mb-1">Sacos Molidos</label>
+            <input id="process-sacks" type="number" step="0.5" value="1" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-stone-600" oninput="calculateRawCornBags()">
           </div>
           <div>
-            <label class="block text-xs font-semibold text-stone-600 mb-1">Sacos Usados</label>
-            <input id="lot-sacks" type="number" step="0.5" value="1" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-stone-600" oninput="calculateLotYield()">
+            <label class="block text-xs font-semibold text-stone-600 mb-1">Peso Total Molido Crudo (Gramos)</label>
+            <input id="process-raw-grams" type="number" value="8921" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm font-bold text-stone-900 outline-none focus:border-stone-600" oninput="calculateRawCornBags()">
+            <span class="text-[10px] text-stone-400">Ejemplo histórico: 8.921g</span>
           </div>
           <div>
-            <label class="block text-xs font-semibold text-stone-600 mb-1">Peso Molienda Cruda (g)</label>
-            <input id="lot-raw-weight" type="number" value="8921" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-stone-600" oninput="calculateLotYield()">
-            <span class="text-[10px] text-stone-400">Referencia: ~8.500g a 9.200g</span>
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-stone-600 mb-1">Kilos Finales Obtenidos</label>
-            <input id="lot-potes" type="number" value="9" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm font-bold text-stone-900 outline-none focus:border-stone-600" oninput="calculateLotYield()">
-            <span class="text-[10px] text-stone-400">Potes de 1 KG envasados</span>
+            <label class="block text-xs font-semibold text-stone-600 mb-1">Bolsas de 1.500g que salen</label>
+            <input id="process-calculated-bags" type="text" value="~5 a 6 bolsas" readonly class="w-full border border-stone-200 bg-stone-50 rounded-lg px-3 py-2 text-sm font-bold text-amber-800 outline-none">
           </div>
           <div class="flex items-end">
-            <button onclick="addLot()" class="w-full bg-stone-900 hover:bg-stone-800 text-white font-semibold py-2 px-4 rounded-lg text-sm transition shadow-sm">
-              Registrar Lote
+            <button onclick="executeMillingStage()" class="w-full bg-stone-900 hover:bg-stone-800 text-white font-semibold py-2 px-3 rounded-lg text-sm transition shadow-sm">
+              Guardar Bolsas en Freezer
             </button>
           </div>
         </div>
 
-        <div id="lot-yield-alert" class="mt-4 p-3 rounded-lg bg-stone-100 border border-stone-200 text-xs text-stone-800 flex items-center justify-between">
+        <div id="milling-alert" class="mt-3 p-3 rounded-lg bg-stone-50 border border-stone-200 text-xs text-stone-700">
+          💡 <strong>Qué hace este botón:</strong> Descuenta 1 saco de tu inventario y suma automáticamente las <strong>bolsas de maíz crudo congelado</strong> para que las tengas disponibles en el freezer.
+        </div>
+      </div>
+
+      <!-- FASE 2: PREPARAR MEZCLA FINAL DESDE EL CONGELADOR -->
+      <div class="bg-white p-5 rounded-xl shadow-sm border-2 border-amber-600/30">
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="text-base font-bold text-stone-900 flex items-center gap-2">
+            <span>🥣</span> FASE 2: Preparar Mezcla Final (Descongelar bolsa y agregar ingredientes)
+          </h2>
+          <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2.5 py-0.5 rounded-full">Paso 2: Llenar Potes</span>
+        </div>
+        <p class="text-xs text-stone-500 mb-4">
+          Sacas las bolsas de maíz crudo del freezer para prepararlas. El sistema calculará la cantidad exacta de agua, azúcar, leche y harina, descontará todo del inventario y dejará los potes listos para vender.
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
           <div>
-            <span class="font-bold">Diagnóstico del Lote:</span> 
-            <span id="lot-yield-text">991g de maíz crudo por kilo. Rendimiento realista estándar (~9 kilos/saco).</span>
+            <label class="block text-xs font-semibold text-stone-700 mb-1">¿Cuántas bolsas de 1.500g vas a preparar?</label>
+            <input id="prep-bags-qty" type="number" min="1" max="20" value="1" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm font-bold text-stone-900 outline-none focus:border-stone-600" oninput="calculatePreparationRecipe()">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-stone-700 mb-1">¿En qué potes vas a envasar?</label>
+            <select id="prep-pack-type" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-xs font-semibold text-stone-800 outline-none focus:border-stone-600" onchange="calculatePreparationRecipe()">
+              <option value="potes_500g">Potes Chinos de 500g (Salen 3 potes por bolsa)</option>
+              <option value="potes_1k">Potes de 1 KG (Sale 1.5 kg por bolsa)</option>
+            </select>
+          </div>
+          <div class="flex items-end">
+            <button onclick="executeFinalPreparation()" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2 px-3 rounded-lg text-sm transition shadow-sm">
+              Confirmar Preparación & Envasar
+            </button>
+          </div>
+        </div>
+
+        <!-- Receta exacta calculada -->
+        <div class="p-4 rounded-xl bg-amber-50/60 border border-amber-200 text-xs text-stone-800 space-y-2">
+          <div class="font-bold text-stone-900 text-sm">📋 Ingredientes exactos que debes agregar en la preparación:</div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs pt-1">
+            <div class="bg-white p-2.5 rounded-lg border border-amber-200/80">
+              <span class="text-stone-500 block">Agua Potable</span>
+              <span class="font-bold text-stone-900 text-sm" id="prep-req-water">300 g (ml)</span>
+            </div>
+            <div class="bg-white p-2.5 rounded-lg border border-amber-200/80">
+              <span class="text-stone-500 block">Azúcar Refinada</span>
+              <span class="font-bold text-stone-900 text-sm" id="prep-req-sugar">80 g</span>
+            </div>
+            <div class="bg-white p-2.5 rounded-lg border border-amber-200/80">
+              <span class="text-stone-500 block">Leche en Polvo</span>
+              <span class="font-bold text-stone-900 text-sm" id="prep-req-milk">35 g</span>
+            </div>
+            <div class="bg-white p-2.5 rounded-lg border border-amber-200/80">
+              <span class="text-stone-500 block">Harina PAN / Trigo</span>
+              <span class="font-bold text-stone-900 text-sm" id="prep-req-flour">50 g</span>
+            </div>
+          </div>
+          <div class="text-[11px] text-stone-600 mt-2">
+            ✅ Al confirmar, se descontarán exactamente estos gramos de azúcar, leche y harina de tu inventario, y tendrás <strong id="prep-result-potes-text">3 potes de 500g listos para la venta</strong>.
           </div>
         </div>
       </div>
 
-      <div class="bg-white rounded-xl shadow-sm border border-stone-200 overflow-hidden">
-        <div class="p-4 bg-stone-50 border-b border-stone-200">
-          <h3 class="font-bold text-stone-800 text-sm">Histórico de Moliendas</h3>
-        </div>
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-sm">
-            <thead class="bg-stone-100 text-stone-600 text-xs uppercase font-semibold">
-              <tr>
-                <th class="p-3">Lote</th>
-                <th class="p-3 text-center">Sacos</th>
-                <th class="p-3 text-right">Peso Crudo</th>
-                <th class="p-3 text-center">Kilos Finales</th>
-                <th class="p-3 text-right">Rendimiento (Kg/Saco)</th>
-                <th class="p-3 text-center">Calidad</th>
-              </tr>
-            </thead>
-            <tbody id="lots-table-body" class="divide-y divide-stone-100">
-              <!-- Renderizado dinámico -->
-            </tbody>
-          </table>
-        </div>
-      </div>
     </div>
 
-    <!-- TAB 5: INVENTARIO -->
+    <!-- TAB 3: INVENTARIO CON MODIFICACIÓN DIRECTA (SIN FLOJERA DE BOTONES) -->
     <div id="tab-inventario" class="hidden space-y-6">
+      
+      <!-- Entrada rápida de compra -->
       <div class="bg-white p-5 rounded-xl shadow-sm border border-stone-200">
         <h2 class="text-sm font-bold text-stone-800 mb-2 flex items-center gap-2">
-          <span>📦</span> Control de Inventario & Alertas de Reabastecimiento
+          <span>🛒</span> Registrar Compra de Mercancía (Entrada de Inventario)
         </h2>
-        <p class="text-xs text-stone-500 mb-4">Revisa cuándo debes comprar más potes, leche o sacos antes de quedarte sin stock.</p>
+        <p class="text-xs text-stone-500 mb-4">
+          ¿Fuiste al mercado y compraste insumos? Ingresa la cantidad directa aquí y se sumará a tus existencias.
+        </p>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4" id="inventory-grid">
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-stone-600 mb-1">Insumo Comprado</label>
+            <select id="inv-quick-item" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-xs font-semibold text-stone-800 outline-none">
+              <option value="jojoto">🌽 Sacos de Jojoto</option>
+              <option value="azucar">🍬 Azúcar Refinada (Gramos)</option>
+              <option value="leche">🥛 Leche en Polvo (Gramos)</option>
+              <option value="harina">🌾 Harina PAN / Trigo (Gramos)</option>
+              <option value="potes_500g">🥡 Potes Chinos 500g (Unidades)</option>
+              <option value="potes_1k">🥣 Potes 1 KG con Tapa (Unidades)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-stone-600 mb-1">Cantidad a Sumar</label>
+            <input id="inv-quick-amount" type="number" placeholder="Ej: 1000" class="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm font-bold text-stone-900 outline-none focus:border-stone-600">
+            <span class="text-[10px] text-stone-400">1 Kg = 1000g • 1 Saco = 1</span>
+          </div>
+          <div class="flex items-end">
+            <button onclick="addStockQuick()" class="w-full bg-stone-900 hover:bg-stone-800 text-white font-semibold py-2 px-3 rounded-lg text-sm transition shadow-sm">
+              ➕ Sumar al Stock
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tarjetas de Inventario con Edición Directa del Número -->
+      <div class="bg-white p-5 rounded-xl shadow-sm border border-stone-200">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-sm font-bold text-stone-800">Existencias Actuales (Puedes escribir la cantidad exacta)</h3>
+          <span class="text-xs text-stone-500">Haz clic en el número para editarlo directamente</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="inventory-grid">
           <!-- Renderizado dinámico -->
         </div>
       </div>
+
     </div>
 
-    <!-- TAB 6: CONFIGURACIÓN & GIT -->
+    <!-- TAB 4: DÓNDE ESTÁ LA GANANCIA (EXPLICACIÓN ULTRA CLARA) -->
+    <div id="tab-claridad-ganancias" class="hidden space-y-6">
+      
+      <div class="bg-white p-5 rounded-xl shadow-sm border border-stone-200">
+        <h2 class="text-base font-bold text-stone-900 mb-2 flex items-center gap-2">
+          <span>💵</span> ¿Dónde está la Ganancia? (Desglose de Bolsillo al Centavo)
+        </h2>
+        <p class="text-xs text-stone-600 mb-4 leading-relaxed">
+          Para que nunca haya dudas de dónde sale tu dinero: aquí está la matemática transparente de lo que te pagan, lo que gastas y <strong>lo que te queda limpio en mano</strong>.
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          <!-- POTE 500g -->
+          <div class="p-5 rounded-2xl border-2 border-stone-300 bg-stone-50/50 space-y-3">
+            <div class="flex items-center justify-between border-b border-stone-200 pb-2">
+              <h3 class="font-extrabold text-stone-900 text-base">Pote de 500g (2 Cachapas)</h3>
+              <span class="text-xs bg-stone-200 text-stone-800 font-bold px-2.5 py-0.5 rounded-full">Individual</span>
+            </div>
+
+            <!-- Escenario A: Retirando en Casa -->
+            <div class="p-3 bg-white rounded-xl border border-stone-200 space-y-1.5 text-xs">
+              <div class="font-bold text-stone-800 text-sm">Escenario 1: El cliente retira en tu casa</div>
+              <div class="flex justify-between text-stone-600"><span>Cobras al cliente:</span><span class="font-bold text-stone-900">$3.00</span></div>
+              <div class="flex justify-between text-stone-500"><span>- Costo de masa + pote chino:</span><span class="text-rose-600 font-medium">-$2.01</span></div>
+              <div class="flex justify-between text-stone-500"><span>- Gasolina / viaje:</span><span class="text-stone-400">$0.00 (No sales)</span></div>
+              <div class="border-t border-stone-200 pt-1.5 flex justify-between text-sm font-extrabold text-emerald-700">
+                <span>TU GANANCIA LIMPIA:</span>
+                <span>+$0.99 (~$1.00)</span>
+              </div>
+            </div>
+
+            <!-- Escenario B: Con Delivery -->
+            <div class="p-3 bg-white rounded-xl border border-stone-200 space-y-1.5 text-xs">
+              <div class="font-bold text-stone-800 text-sm">Escenario 2: Llevándoselo a su puerta</div>
+              <div class="flex justify-between text-stone-600"><span>Cobras al cliente (Delivery Incluido):</span><span class="font-bold text-stone-900">$4.50</span></div>
+              <div class="flex justify-between text-stone-500"><span>- Costo de masa + pote chino:</span><span class="text-rose-600 font-medium">-$2.01</span></div>
+              <div class="flex justify-between text-stone-500"><span>- Gasolina / moto de tu viaje:</span><span class="text-rose-600 font-medium">-$1.50</span></div>
+              <div class="border-t border-stone-200 pt-1.5 flex justify-between text-sm font-extrabold text-emerald-700">
+                <span>TU GANANCIA LIMPIA:</span>
+                <span>+$0.99 (~$1.00)</span>
+              </div>
+            </div>
+            
+            <p class="text-[11px] text-stone-500 italic">
+              👉 En ambos casos te ganas tu dólar limpio en la mano. La diferencia es que en el de $4.50 el cliente te está pagando la gasolina de tu moto.
+            </p>
+          </div>
+
+          <!-- POTE 1 KG -->
+          <div class="p-5 rounded-2xl border-2 border-stone-900 bg-white space-y-3 shadow-sm">
+            <div class="flex items-center justify-between border-b border-stone-200 pb-2">
+              <h3 class="font-extrabold text-stone-900 text-base">Pote de 1 KG (4 Cachapas)</h3>
+              <span class="text-xs bg-amber-100 text-amber-900 font-bold px-2.5 py-0.5 rounded-full">El Más Vendido</span>
+            </div>
+
+            <!-- Escenario A: Retirando en Casa -->
+            <div class="p-3 bg-stone-50 rounded-xl border border-stone-200 space-y-1.5 text-xs">
+              <div class="font-bold text-stone-800 text-sm">Escenario 1: El cliente retira en tu casa</div>
+              <div class="flex justify-between text-stone-600"><span>Cobras al cliente:</span><span class="font-bold text-stone-900">$5.00</span></div>
+              <div class="flex justify-between text-stone-500"><span>- Costo de masa 1kg + 1 pote grande:</span><span class="text-rose-600 font-medium">-$3.74</span></div>
+              <div class="flex justify-between text-stone-500"><span>- Gasolina / viaje:</span><span class="text-stone-400">$0.00 (No sales)</span></div>
+              <div class="border-t border-stone-200 pt-1.5 flex justify-between text-sm font-extrabold text-emerald-700">
+                <span>TU GANANCIA LIMPIA:</span>
+                <span>+$1.26</span>
+              </div>
+            </div>
+
+            <!-- Escenario B: Con Delivery -->
+            <div class="p-3 bg-stone-50 rounded-xl border border-stone-200 space-y-1.5 text-xs">
+              <div class="font-bold text-stone-800 text-sm">Escenario 2: Llevándoselo a su puerta</div>
+              <div class="flex justify-between text-stone-600"><span>Cobras al cliente (Delivery Incluido):</span><span class="font-bold text-stone-900">$6.50</span></div>
+              <div class="flex justify-between text-stone-500"><span>- Costo de masa 1kg + 1 pote grande:</span><span class="text-rose-600 font-medium">-$3.74</span></div>
+              <div class="flex justify-between text-stone-500"><span>- Gasolina / moto de tu viaje:</span><span class="text-rose-600 font-medium">-$1.50</span></div>
+              <div class="border-t border-stone-200 pt-1.5 flex justify-between text-sm font-extrabold text-emerald-700">
+                <span>TU GANANCIA LIMPIA:</span>
+                <span>+$1.26</span>
+              </div>
+            </div>
+
+            <p class="text-[11px] text-stone-500 italic">
+              👉 Si cobras **$7.00** con delivery en vez de $6.50, tu ganancia neta sube a **+$1.76 limpios por kilo**.
+            </p>
+          </div>
+
+        </div>
+
+        <!-- Combo 2 KG -->
+        <div class="mt-4 p-4 rounded-xl bg-stone-900 text-white flex flex-wrap items-center justify-between gap-3 text-xs">
+          <div>
+            <span class="font-bold text-amber-300 text-sm block">⭐ Combo Familiar 2 KG: Cobras $11.00 (Delivery Gratis)</span>
+            <span class="text-stone-300 text-[11px]">Gastas en masa ($7.48) + gasolina de 1 solo viaje ($1.50) = Gasto total $8.98.</span>
+          </div>
+          <div class="text-right">
+            <span class="text-stone-400 block text-[10px] uppercase font-bold">Ganancia Limpia en Mano</span>
+            <span class="text-xl font-extrabold text-emerald-400">+$2.02</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TAB 5: CONFIGURACIÓN & GIT -->
     <div id="tab-configuracion" class="hidden space-y-6">
       <div class="bg-white p-5 rounded-xl shadow-sm border border-stone-200">
         <h2 class="text-sm font-bold text-stone-800 mb-2 flex items-center gap-2">
-          <span>⚙️</span> Copias de Seguridad & Control con Git
+          <span>⚙️</span> Copias de Seguridad & Sincronización
         </h2>
-        <p class="text-xs text-stone-500 mb-4">Guarda tus datos localmente o descárgalos para mantener tu historial seguro.</p>
+        <p class="text-xs text-stone-500 mb-4">Descarga una copia de tus ventas y materias primas en cualquier momento.</p>
 
         <div class="flex flex-wrap gap-3 mb-6">
           <button onclick="exportData()" class="bg-stone-900 hover:bg-stone-800 text-white font-semibold py-2 px-4 rounded-lg text-sm transition">
@@ -500,7 +448,7 @@ O si llevas el Combo Familiar de 2 KG te queda en solo $11.00.
           </label>
 
           <button onclick="resetToInitialData()" class="bg-rose-50 hover:bg-rose-100 text-rose-700 font-semibold py-2 px-4 rounded-lg text-sm transition border border-rose-200">
-            ⚠️ Restaurar Datos Originales
+            ⚠️ Restaurar Datos Base
           </button>
         </div>
 
@@ -516,30 +464,19 @@ O si llevas el Combo Familiar de 2 KG te queda en solo $11.00.
   </main>
 
   <script>
+    // Initial Seed Data enriquecida con los dos pasos de producción
     const INITIAL_DATA = {
       rateBCV: 477.00,
-      cornState: 'optimo',
-      prices: {
-        sackUSD: 25.00,
-        sugarKgBs: 1854.00,
-        milk900gBs: 10389.00,
-        flourKgBs: 1021.00,
-        containerUSD: 0.38
-      },
       inventory: [
         { id: 'jojoto', name: 'Sacos de Jojoto', qty: 2, unit: 'sacos', min: 1, icon: '🌽' },
-        { id: 'potes_1k', name: 'Potes de 1 KG + Tapa', qty: 25, unit: 'unidades', min: 10, icon: '🥣' },
-        { id: 'potes_500g', name: 'Potes Chinos 500g', qty: 20, unit: 'unidades', min: 10, icon: '🥡' },
-        { id: 'leche', name: 'Leche en Polvo', qty: 1800, unit: 'gramos', min: 500, icon: '🥛' },
-        { id: 'azucar', name: 'Azúcar Refinada', qty: 2500, unit: 'gramos', min: 1000, icon: '🍬' },
-        { id: 'harina', name: 'Harina PAN / Trigo', qty: 2000, unit: 'gramos', min: 500, icon: '🌾' }
-      ],
-      lots: [
-        { id: 1, name: 'Lote 1', sacks: 1, rawGrams: 8900, potes: 18, state: 'seco', notes: '18 potes 500g' },
-        { id: 2, name: 'Lote 2', sacks: 2, rawGrams: 17800, potes: 22, state: 'optimo', notes: '11 kg/saco' },
-        { id: 3, name: 'Lote 3', sacks: 2, rawGrams: 16000, potes: 15, state: 'tierno', notes: '7.5 kg/saco' },
-        { id: 4, name: 'Lote 4', sacks: 2, rawGrams: 14000, potes: 9, state: 'tierno', notes: '4.5 kg/saco' },
-        { id: 5, name: 'Lote 5', sacks: 2, rawGrams: 15000, potes: 10, state: 'tierno', notes: '5 kg/saco' }
+        { id: 'bolsas_crudas', name: 'Bolsas Maíz Crudo 1.5kg (Freezer)', qty: 6, unit: 'bolsas', min: 2, icon: '🧊' },
+        { id: 'potes_500g_listos', name: 'Potes 500g Listos para Vender', qty: 15, unit: 'potes', min: 5, icon: '🥣' },
+        { id: 'potes_1k_listos', name: 'Potes 1 KG Listos para Vender', qty: 8, unit: 'potes', min: 3, icon: '🥡' },
+        { id: 'azucar', name: 'Azúcar Refinada', qty: 2500, unit: 'gramos', min: 500, icon: '🍬' },
+        { id: 'leche', name: 'Leche en Polvo Upaca', qty: 1800, unit: 'gramos', min: 300, icon: '🥛' },
+        { id: 'harina', name: 'Harina PAN / Trigo', qty: 2000, unit: 'gramos', min: 500, icon: '🌾' },
+        { id: 'potes_500g_vacios', name: 'Potes Chinos Vacíos con Tapa', qty: 50, unit: 'unidades', min: 15, icon: '🥡' },
+        { id: 'potes_1k_vacios', name: 'Potes 1 KG Vacíos con Tapa', qty: 25, unit: 'unidades', min: 10, icon: '🥣' }
       ],
       sales: [
         { id: 1, client: 'Carolina', phone: '', product: 'Pote 1 KG (Delivery)', total: 6.5, paid: 6.5, status: 'paid', date: '2026-11-01' },
@@ -562,7 +499,7 @@ O si llevas el Combo Familiar de 2 KG te queda en solo $11.00.
         { id: 18, client: 'Lucy', phone: '', product: 'Combo 2 KG', total: 11.0, paid: 0, status: 'debt', date: '2026-11-08' },
         { id: 19, client: 'Rossys', phone: '', product: 'Pote 1 KG (Delivery)', total: 6.5, paid: 0, status: 'debt', date: '2026-11-08' },
         { id: 20, client: 'Dc Luis', phone: '', product: 'Pote 1 KG (Delivery)', total: 6.5, paid: 0, status: 'debt', date: '2026-11-08' },
-        { id: 21, client: 'Aquiles', phone: '', product: 'Combo 2 KG', total: 11.0, paid: 5.0, status: 'partial', date: '2026-11-12' },
+        { id: 21, client: 'Aquiles', phone: '', product: 'Combo 1.5 KG', total: 8.0, paid: 5.0, status: 'partial', date: '2026-11-12' },
         { id: 22, client: 'Franco', phone: '', product: 'Pote 1 KG (Delivery)', total: 6.5, paid: 0, status: 'debt', date: '2026-11-15' },
         { id: 23, client: 'Rodolfo', phone: '', product: 'Pote 500g (Casa)', total: 3.0, paid: 0, status: 'debt', date: '2026-11-15' },
         { id: 24, client: 'Luis Brea', phone: '', product: 'Pote 500g (Casa)', total: 3.0, paid: 0, status: 'debt', date: '2026-11-15' }
@@ -570,21 +507,29 @@ O si llevas el Combo Familiar de 2 KG te queda en solo $11.00.
     };
 
     let appData = JSON.parse(localStorage.getItem('chpa_app_data')) || INITIAL_DATA;
-    if (!appData.cornState) appData.cornState = 'optimo';
+
+    // Validación y migración de inventario si venía de versión vieja
+    function ensureInventoryIntegrity() {
+      if (!appData.inventory || appData.inventory.length < 9) {
+        appData.inventory = JSON.parse(JSON.stringify(INITIAL_DATA.inventory));
+      }
+    }
+    ensureInventoryIntegrity();
 
     function saveData() {
       localStorage.setItem('chpa_app_data', JSON.stringify(appData));
       updateUI();
     }
 
+    // SwitchTab Infalible (Sin texto blanco sobre fondo blanco)
     function switchTab(tabName) {
-      ['ventas', 'combos', 'costos', 'produccion', 'inventario', 'configuracion'].forEach(t => {
+      const allTabs = ['ventas', 'produccion', 'inventario', 'claridad-ganancias', 'configuracion'];
+      allTabs.forEach(t => {
         const el = document.getElementById(`tab-${t}`);
         if (el) el.classList.add('hidden');
         const btn = document.getElementById(`tab-btn-${t}`);
         if (btn) {
-          btn.classList.remove('bg-stone-900', 'text-white', 'shadow-sm');
-          btn.classList.add('bg-white', 'text-stone-600');
+          btn.className = "px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition bg-white text-stone-700 border border-stone-200 hover:bg-stone-50";
         }
       });
 
@@ -592,8 +537,7 @@ O si llevas el Combo Familiar de 2 KG te queda en solo $11.00.
       if (activeEl) activeEl.classList.remove('hidden');
       const activeBtn = document.getElementById(`tab-btn-${tabName}`);
       if (activeBtn) {
-        activeBtn.classList.remove('bg-white', 'text-stone-600');
-        activeBtn.classList.add('bg-stone-900', 'text-white', 'shadow-sm');
+        activeBtn.className = "px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition shadow-sm bg-stone-900 text-white";
       }
     }
 
@@ -606,21 +550,156 @@ O si llevas el Combo Familiar de 2 KG te queda en solo $11.00.
       updateUI();
     }
 
-    function selectCornState(state) {
-      appData.cornState = state;
-      const adviceEl = document.getElementById('corn-technical-text');
+    // FASE 1: Cálculo de Bolsas Crudas
+    function calculateRawCornBags() {
+      const grams = parseFloat(document.getElementById('process-raw-grams').value) || 0;
+      const bags = Math.floor(grams / 1500);
+      const remainder = grams % 1500;
+      document.getElementById('process-calculated-bags').value = `${bags} bolsas de 1.500g (+${remainder}g sobrante)`;
+    }
 
-      if (state === 'tierno') {
-        adviceEl.innerHTML = `<strong>⚠️ Alerta Maíz Muy Tierno:</strong> El maíz tiene exceso de agua libre. Reduce agua a 50ml-100ml y añade ~70g de harina para que cuaje.`;
-      } else if (state === 'seco') {
-        adviceEl.innerHTML = `<strong>🌾 Ventaja Maíz Seco / Sazón:</strong> Al moler queda harinoso. El almidón absorbe agua y expande masa. Añade 400ml-500ml de líquido.`;
+    function executeMillingStage() {
+      const sacks = parseFloat(document.getElementById('process-sacks').value) || 1;
+      const grams = parseFloat(document.getElementById('process-raw-grams').value) || 0;
+      const bags = Math.floor(grams / 1500);
+
+      if (bags <= 0) {
+        alert('Ingresa una cantidad de gramos válida');
+        return;
+      }
+
+      // Descontar sacos
+      const sackInv = appData.inventory.find(i => i.id === 'jojoto');
+      if (sackInv) sackInv.qty = Math.max(0, sackInv.qty - sacks);
+
+      // Sumar bolsas crudas al freezer
+      const rawBagsInv = appData.inventory.find(i => i.id === 'bolsas_crudas');
+      if (rawBagsInv) rawBagsInv.qty += bags;
+
+      saveData();
+      alert(`¡Molienda guardada! Se descontaron ${sacks} saco(s) y se agregaron ${bags} bolsas de maíz crudo congelado al freezer.`);
+    }
+
+    // FASE 2: Preparación Final de Potes
+    function calculatePreparationRecipe() {
+      const bags = parseInt(document.getElementById('prep-bags-qty').value) || 1;
+      const packType = document.getElementById('prep-pack-type').value;
+
+      document.getElementById('prep-req-water').innerText = `${bags * 300} g (ml)`;
+      document.getElementById('prep-req-sugar').innerText = `${bags * 80} g`;
+      document.getElementById('prep-req-milk').innerText = `${bags * 35} g`;
+      document.getElementById('prep-req-flour').innerText = `${bags * 50} g`;
+
+      if (packType === 'potes_500g') {
+        const potes = bags * 3;
+        document.getElementById('prep-result-potes-text').innerText = `${potes} potes de 500g listos para la venta`;
       } else {
-        adviceEl.innerHTML = `<strong>🌽 Punto Ideal:</strong> Equilibrio perfecto. 300ml de agua y 50g de harina por bolsa de 1.500g.`;
+        const potes1k = Math.floor(bags * 1.5);
+        document.getElementById('prep-result-potes-text').innerText = `~${potes1k} potes de 1 KG listos para la venta`;
+      }
+    }
+
+    function executeFinalPreparation() {
+      const bags = parseInt(document.getElementById('prep-bags-qty').value) || 1;
+      const packType = document.getElementById('prep-pack-type').value;
+
+      const rawBagsInv = appData.inventory.find(i => i.id === 'bolsas_crudas');
+      if (!rawBagsInv || rawBagsInv.qty < bags) {
+        alert(`No tienes suficientes bolsas de maíz crudo en el freezer. Tienes ${rawBagsInv ? rawBagsInv.qty : 0} bolsas.`);
+        return;
+      }
+
+      const reqSugar = bags * 80;
+      const reqMilk = bags * 35;
+      const reqFlour = bags * 50;
+
+      // Descontar insumos
+      rawBagsInv.qty -= bags;
+      const sugarInv = appData.inventory.find(i => i.id === 'azucar');
+      if (sugarInv) sugarInv.qty = Math.max(0, sugarInv.qty - reqSugar);
+
+      const milkInv = appData.inventory.find(i => i.id === 'leche');
+      if (milkInv) milkInv.qty = Math.max(0, milkInv.qty - reqMilk);
+
+      const flourInv = appData.inventory.find(i => i.id === 'harina');
+      if (flourInv) flourInv.qty = Math.max(0, flourInv.qty - reqFlour);
+
+      // Sumar producto terminado y descontar envases vacíos
+      if (packType === 'potes_500g') {
+        const potes = bags * 3;
+        const potesListos = appData.inventory.find(i => i.id === 'potes_500g_listos');
+        if (potesListos) potesListos.qty += potes;
+
+        const potesVacios = appData.inventory.find(i => i.id === 'potes_500g_vacios');
+        if (potesVacios) potesVacios.qty = Math.max(0, potesVacios.qty - potes);
+        alert(`¡Preparación lista! Se envasaron ${potes} potes de 500g y se descontaron los insumos del inventario.`);
+      } else {
+        const potes1k = Math.floor(bags * 1.5);
+        const potesListos = appData.inventory.find(i => i.id === 'potes_1k_listos');
+        if (potesListos) potesListos.qty += potes1k;
+
+        const potesVacios = appData.inventory.find(i => i.id === 'potes_1k_vacios');
+        if (potesVacios) potesVacios.qty = Math.max(0, potesVacios.qty - potes1k);
+        alert(`¡Preparación lista! Se envasaron ${potes1k} potes de 1 KG y se descontaron los insumos del inventario.`);
       }
 
       saveData();
     }
 
+    // INVENTARIO DIRECTO: Suma rápida
+    function addStockQuick() {
+      const itemId = document.getElementById('inv-quick-item').value;
+      const amount = parseFloat(document.getElementById('inv-quick-amount').value) || 0;
+
+      if (amount <= 0) {
+        alert('Por favor ingresa una cantidad mayor a cero');
+        return;
+      }
+
+      const item = appData.inventory.find(i => i.id === itemId);
+      if (item) {
+        item.qty += amount;
+        saveData();
+        document.getElementById('inv-quick-amount').value = '';
+        alert(`¡Stock actualizado! Se sumaron ${amount} a ${item.name}. Total actual: ${item.qty} ${item.unit}.`);
+      }
+    }
+
+    function setDirectInventoryQty(id, newQty) {
+      const item = appData.inventory.find(i => i.id === id);
+      if (item) {
+        item.qty = Math.max(0, parseFloat(newQty) || 0);
+        saveData();
+      }
+    }
+
+    function renderInventory() {
+      const grid = document.getElementById('inventory-grid');
+      grid.innerHTML = appData.inventory.map(item => {
+        const isCritical = item.qty <= item.min;
+        return `
+          <div class="p-4 rounded-xl border ${isCritical ? 'border-rose-300 bg-rose-50/50' : 'border-stone-200 bg-white'} shadow-sm flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="text-2xl">${item.icon}</span>
+                ${isCritical ? '<span class="text-[10px] bg-rose-100 text-rose-700 font-bold px-2 py-0.5 rounded-full">STOCK BAJO</span>' : '<span class="text-[10px] bg-emerald-100 text-emerald-700 font-semibold px-2 py-0.5 rounded-full">OK</span>'}
+              </div>
+              <div class="mt-2 font-bold text-stone-800 text-xs sm:text-sm">${item.name}</div>
+            </div>
+
+            <div class="mt-3">
+              <label class="block text-[10px] text-stone-400 font-medium">Cantidad actual (${item.unit}):</label>
+              <div class="flex items-center gap-1 mt-1">
+                <input type="number" step="any" value="${item.qty}" class="w-full border border-stone-300 rounded-lg px-2.5 py-1 text-base font-extrabold text-stone-900 bg-stone-50 focus:bg-white focus:border-stone-600 outline-none" onchange="setDirectInventoryQty('${item.id}', this.value)">
+                <span class="text-xs text-stone-500 font-semibold whitespace-nowrap">${item.unit}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // VENTAS & COBRANZAS
     function applyProductSelection() {
       const selection = document.getElementById('sale-combo-select').value;
       let total = 6.50;
@@ -665,6 +744,18 @@ O si llevas el Combo Familiar de 2 KG te queda en solo $11.00.
 
       appData.sales.unshift(newSale);
       
+      // Descontar pote vendido del inventario si hay disponible
+      if (productSelect.value.includes('500g')) {
+        const p500 = appData.inventory.find(i => i.id === 'potes_500g_listos');
+        if (p500) p500.qty = Math.max(0, p500.qty - 1);
+      } else if (productSelect.value.includes('1kg')) {
+        const p1k = appData.inventory.find(i => i.id === 'potes_1k_listos');
+        if (p1k) p1k.qty = Math.max(0, p1k.qty - 1);
+      } else if (productSelect.value.includes('2kg')) {
+        const p1k = appData.inventory.find(i => i.id === 'potes_1k_listos');
+        if (p1k) p1k.qty = Math.max(0, p1k.qty - 2);
+      }
+
       document.getElementById('sale-client').value = '';
       document.getElementById('sale-phone').value = '';
       applyProductSelection();
@@ -698,7 +789,7 @@ O si llevas el Combo Familiar de 2 KG te queda en solo $11.00.
       const debtUSD = sale.total - sale.paid;
       const debtBs = (debtUSD * appData.rateBCV).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
       
-      const msg = `Hola ${sale.client}! Te escribo de Chpa 🌽. Te recuerdo el saldo pendiente de ${sale.product} de masa de cachapa artesanal: $${debtUSD.toFixed(2)} (o Bs ${debtBs} a tasa BCV ${appData.rateBCV}). ¡Muchas gracias por tu compra!`;
+      const msg = `Hola ${sale.client}! Te escribo de Chpa 🌽. Te recuerdo el saldo pendiente de tu masa de cachapa artesanal: $${debtUSD.toFixed(2)} (o Bs ${debtBs} a tasa BCV ${appData.rateBCV}). ¡Muchas gracias por tu compra!`;
       
       if (sale.phone) {
         window.open(`https://wa.me/${sale.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(msg)}`, '_blank');
@@ -706,12 +797,6 @@ O si llevas el Combo Familiar de 2 KG te queda en solo $11.00.
         navigator.clipboard.writeText(msg);
         alert('Mensaje copiado al portapapeles. Pégalo en el chat de WhatsApp con el cliente:\n\n' + msg);
       }
-    }
-
-    function copyText(id) {
-      const text = document.getElementById(id).innerText;
-      navigator.clipboard.writeText(text);
-      alert('¡Copiado al portapapeles!');
     }
 
     let currentFilter = 'all';
@@ -770,119 +855,6 @@ O si llevas el Combo Familiar de 2 KG te queda en solo $11.00.
       }).join('');
     }
 
-    function calculateLotYield() {
-      const sacks = parseFloat(document.getElementById('lot-sacks').value) || 1;
-      const rawGrams = parseFloat(document.getElementById('lot-raw-weight').value) || 0;
-      const potes = parseInt(document.getElementById('lot-potes').value) || 0;
-
-      const potesPerSack = (potes / sacks).toFixed(1);
-      const gramsPerPote = potes > 0 ? (rawGrams / potes).toFixed(0) : 0;
-
-      let msg = `${gramsPerPote}g de maíz crudo por kilo de masa. Rendimiento: ${potesPerSack} kg/saco. `;
-      if (potesPerSack < 8) {
-        msg += '⚠️ Rendimiento bajo: maíz con exceso de agua libre o merma alta.';
-      } else if (potesPerSack >= 12) {
-        msg += '🌾 Excelente rendimiento: el grano almidonado rindió más masa.';
-      } else {
-        msg += '✅ Rendimiento estándar saludable (~9-10 kg/saco).';
-      }
-      document.getElementById('lot-yield-text').innerText = msg;
-    }
-
-    function addLot() {
-      const name = document.getElementById('lot-name').value.trim() || `Lote ${appData.lots.length + 1}`;
-      const sacks = parseFloat(document.getElementById('lot-sacks').value) || 1;
-      const rawGrams = parseFloat(document.getElementById('lot-raw-weight').value) || 0;
-      const potes = parseInt(document.getElementById('lot-potes').value) || 0;
-
-      const newLot = {
-        id: Date.now(),
-        name,
-        sacks,
-        rawGrams,
-        potes,
-        state: appData.cornState,
-        notes: `${(potes/sacks).toFixed(1)} kg por saco`
-      };
-
-      appData.lots.unshift(newLot);
-
-      const potesInv = appData.inventory.find(i => i.id === 'potes_1k');
-      if (potesInv) potesInv.qty += potes;
-      
-      const sackInv = appData.inventory.find(i => i.id === 'jojoto');
-      if (sackInv) sackInv.qty = Math.max(0, sackInv.qty - sacks);
-
-      saveData();
-    }
-
-    function renderLotsTable() {
-      const tbody = document.getElementById('lots-table-body');
-      tbody.innerHTML = appData.lots.map(l => {
-        const yieldPerSack = (l.potes / l.sacks).toFixed(1);
-        let badge = '<span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">Óptimo (>10 kg)</span>';
-        if (yieldPerSack < 8) {
-          badge = '<span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-100 text-rose-800">Merma Alta (&lt;8 kg)</span>';
-        } else if (yieldPerSack < 10) {
-          badge = '<span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-stone-200 text-stone-700">Aceptable</span>';
-        }
-
-        return `
-          <tr class="hover:bg-stone-50">
-            <td class="p-3 font-semibold text-stone-800">
-              ${l.name}
-              <span class="block text-[11px] text-stone-400 font-normal">Tipo: ${l.state || 'estándar'}</span>
-            </td>
-            <td class="p-3 text-center">${l.sacks}</td>
-            <td class="p-3 text-right font-medium">${l.rawGrams.toLocaleString()} g</td>
-            <td class="p-3 text-center font-bold text-stone-800">${l.potes} kg</td>
-            <td class="p-3 text-right font-semibold">${yieldPerSack} kg/saco</td>
-            <td class="p-3 text-center">${badge}</td>
-          </tr>
-        `;
-      }).join('');
-    }
-
-    function calculateRecipeCosts() {
-      appData.prices.sackUSD = parseFloat(document.getElementById('price-sack').value) || 25;
-      appData.prices.sugarKgBs = parseFloat(document.getElementById('price-sugar-bs').value) || 1854;
-      appData.prices.milk900gBs = parseFloat(document.getElementById('price-milk-bs').value) || 10389;
-      appData.prices.flourKgBs = parseFloat(document.getElementById('price-flour-bs').value) || 1021;
-      appData.prices.containerUSD = parseFloat(document.getElementById('price-container-usd').value) || 0.38;
-
-      saveData();
-    }
-
-    function renderInventory() {
-      const grid = document.getElementById('inventory-grid');
-      grid.innerHTML = appData.inventory.map(item => {
-        const isCritical = item.qty <= item.min;
-        return `
-          <div class="p-4 rounded-xl border ${isCritical ? 'border-rose-300 bg-rose-50/40' : 'border-stone-200 bg-white'} shadow-sm">
-            <div class="flex items-center justify-between">
-              <span class="text-2xl">${item.icon}</span>
-              ${isCritical ? '<span class="text-[10px] bg-rose-100 text-rose-700 font-bold px-2 py-0.5 rounded-full">STOCK CRÍTICO</span>' : '<span class="text-[10px] bg-emerald-100 text-emerald-700 font-semibold px-2 py-0.5 rounded-full">OK</span>'}
-            </div>
-            <div class="mt-2 font-bold text-stone-800 text-sm">${item.name}</div>
-            <div class="text-xl font-extrabold mt-1 ${isCritical ? 'text-rose-700' : 'text-stone-900'}">${item.qty} <span class="text-xs font-normal text-stone-500">${item.unit}</span></div>
-            <div class="text-[10px] text-stone-400 mt-1">Mínimo sugerido: ${item.min} ${item.unit}</div>
-            <div class="mt-3 flex gap-1">
-              <button onclick="adjustInventory('${item.id}', 1)" class="text-xs bg-stone-100 hover:bg-stone-200 text-stone-700 px-2.5 py-1 rounded font-semibold">+1</button>
-              <button onclick="adjustInventory('${item.id}', -1)" class="text-xs bg-stone-100 hover:bg-stone-200 text-stone-700 px-2.5 py-1 rounded font-semibold">-1</button>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    function adjustInventory(id, delta) {
-      const item = appData.inventory.find(i => i.id === id);
-      if (item) {
-        item.qty = Math.max(0, item.qty + delta);
-        saveData();
-      }
-    }
-
     function updateUI() {
       document.getElementById('global-rate').value = appData.rateBCV;
       
@@ -890,8 +862,8 @@ O si llevas el Combo Familiar de 2 KG te queda en solo $11.00.
       const totalPaidUSD = appData.sales.reduce((sum, s) => sum + s.paid, 0);
       const totalDebtUSD = totalSalesUSD - totalPaidUSD;
 
-      // Ganancia realista promedio estimada: $1.25 por venta
-      const totalProfitUSD = totalPaidUSD - (appData.sales.length * 4.25);
+      // Ganancia limpia promedio real de $1.25 por pedido
+      const totalProfitUSD = appData.sales.filter(s => s.status === 'paid').length * 1.25;
 
       document.getElementById('kpi-sales-usd').innerText = `$${totalSalesUSD.toFixed(2)}`;
       document.getElementById('kpi-sales-bs').innerText = `Bs ${(totalSalesUSD * appData.rateBCV).toLocaleString('es-VE', { minimumFractionDigits: 2 })}`;
@@ -899,13 +871,19 @@ O si llevas el Combo Familiar de 2 KG te queda en solo $11.00.
       document.getElementById('kpi-debts-usd').innerText = `$${totalDebtUSD.toFixed(2)}`;
       document.getElementById('kpi-debts-bs').innerText = `Bs ${(totalDebtUSD * appData.rateBCV).toLocaleString('es-VE', { minimumFractionDigits: 2 })}`;
 
-      document.getElementById('kpi-delivered-potes').innerText = `${appData.sales.length} entregas`;
+      // Potes listos en freezer
+      const p500 = appData.inventory.find(i => i.id === 'potes_500g_listos');
+      const p1k = appData.inventory.find(i => i.id === 'potes_1k_listos');
+      const rawBags = appData.inventory.find(i => i.id === 'bolsas_crudas');
+      
+      const totalPotesListos = (p500 ? p500.qty : 0) + (p1k ? p1k.qty : 0);
+      document.getElementById('kpi-freezer-stock').innerText = `${totalPotesListos} Potes`;
+      document.getElementById('kpi-raw-bags').innerText = `${rawBags ? rawBags.qty : 0} bolsas crudas de 1.5kg`;
 
-      document.getElementById('kpi-profit-usd').innerText = `$${Math.max(0, totalProfitUSD).toFixed(2)}`;
-      document.getElementById('kpi-profit-bs').innerText = `Bs ${(Math.max(0, totalProfitUSD) * appData.rateBCV).toLocaleString('es-VE', { minimumFractionDigits: 2 })}`;
+      document.getElementById('kpi-profit-usd').innerText = `$${totalProfitUSD.toFixed(2)}`;
+      document.getElementById('kpi-profit-bs').innerText = `Bs ${(totalProfitUSD * appData.rateBCV).toLocaleString('es-VE', { minimumFractionDigits: 2 })}`;
 
       renderSalesTable();
-      renderLotsTable();
       renderInventory();
     }
 
@@ -926,6 +904,7 @@ O si llevas el Combo Familiar de 2 KG te queda en solo $11.00.
       reader.onload = function(e) {
         try {
           appData = JSON.parse(e.target.result);
+          ensureInventoryIntegrity();
           saveData();
           alert('¡Datos restaurados con éxito!');
         } catch (err) {
@@ -936,15 +915,16 @@ O si llevas el Combo Familiar de 2 KG te queda en solo $11.00.
     }
 
     function resetToInitialData() {
-      if (confirm('¿Restaurar los datos originales del histórico? Esto reemplazará los datos actuales.')) {
+      if (confirm('¿Restaurar los datos base?')) {
         appData = JSON.parse(JSON.stringify(INITIAL_DATA));
         saveData();
       }
     }
 
     window.addEventListener('DOMContentLoaded', () => {
+      calculateRawCornBags();
+      calculatePreparationRecipe();
       applyProductSelection();
-      calculateLotYield();
       updateUI();
     });
   </script>
