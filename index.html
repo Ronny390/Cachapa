@@ -466,7 +466,10 @@
 
           <div class="flex flex-wrap gap-2">
             <button onclick="saveFirebaseCredentials()" class="bg-stone-900 hover:bg-stone-800 text-white font-bold py-2 px-4 rounded-lg text-xs transition shadow-sm">
-              🚀 Conectar y Sincronizar en Tiempo Real
+              💾 Guardar Configuración
+            </button>
+            <button onclick="reconnectDefaultFirebase()" class="bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2 px-4 rounded-lg text-xs transition shadow-sm flex items-center gap-1.5">
+              <span>🔄</span> Reconectar Base de Datos Cachapa
             </button>
             <button onclick="disconnectFirebase()" class="bg-stone-200 hover:bg-stone-300 text-stone-700 font-semibold py-2 px-3 rounded-lg text-xs transition">
               Desconectar
@@ -474,17 +477,26 @@
           </div>
         </div>
 
-        <!-- Instrucciones paso a paso para crear Firebase gratis -->
+        <!-- Regla permanente de Firestore para evitar que expire a los 30 días -->
         <div class="mt-5 border-t border-stone-200 pt-4 text-xs text-stone-600 space-y-2">
-          <h4 class="font-bold text-stone-800 text-xs uppercase tracking-wider">¿Cómo obtener tu Firebase gratis en 2 minutos?</h4>
-          <ol class="list-decimal list-inside space-y-1 text-stone-600 pl-1">
-            <li>Entra a <strong><a href="https://console.firebase.google.com" target="_blank" class="text-amber-700 underline font-semibold">console.firebase.google.com</a></strong> con tu cuenta de Google.</li>
-            <li>Haz clic en <strong>"Crear un proyecto"</strong> y ponle de nombre: <code class="bg-stone-100 px-1 py-0.5 rounded">Cachapa</code>.</li>
-            <li>En el menú de la izquierda ve a <strong>Compilación &gt; Firestore Database</strong> y dale a <strong>"Crear base de datos"</strong> (Elige modo de prueba).</li>
-            <li>Ve a la rueda de configuración ⚙️ arriba a la izquierda &gt; <strong>Configuración del proyecto</strong>.</li>
-            <li>Baja hasta "Tus apps", toca el icono de web <strong>&lt;/&gt;</strong> y copia el cuadrito que dice <code class="bg-stone-100 px-1 py-0.5 rounded">const firebaseConfig = { ... }</code>.</li>
-            <li>¡Lo pegas arriba y listo! Ya estarán conectados tú y tu novia al mismo proyecto.</li>
-          </ol>
+          <div class="flex items-center gap-2 text-stone-900 font-bold">
+            <span class="text-emerald-600">🛡️</span>
+            <span>Regla Permanente de Firestore (Sin Expiración de 30 Días):</span>
+          </div>
+          <p class="text-stone-600 leading-relaxed">
+            Para que tu base de datos funcione siempre gratis sin límite de tiempo, entra a la consola de Firebase en tu PC o cel: ve a <strong>Firestore Database &gt; pestaña Reglas</strong> y pega este código:
+          </p>
+          <pre class="bg-stone-900 text-emerald-400 p-3 rounded-lg font-mono text-[11px] overflow-x-auto leading-relaxed">rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /negocio_chpa/{document=**} {
+      allow read, write: if true;
+    }
+  }
+}</pre>
+          <p class="text-[11px] text-stone-500">
+            Haz clic en <strong>"Publicar"</strong> en Firebase y listo: tu base de datos estará activa para siempre.
+          </p>
         </div>
       </div>
 
@@ -568,82 +580,112 @@
     let db = null;
     let isRemoteUpdate = false;
 
+    // Configuración oficial de tu proyecto Firebase (cachapa-418ff)
+    const DEFAULT_FIREBASE_CONFIG = {
+      apiKey: "AIzaSyAJBVKhJX0E51SOLb52i-3UZW4SywN3Bec",
+      authDomain: "cachapa-418ff.firebaseapp.com",
+      projectId: "cachapa-418ff",
+      storageBucket: "cachapa-418ff.firebasestorage.app",
+      messagingSenderId: "751839016248",
+      appId: "1:751839016248:web:a96efbe0cda3cdcb5cbdcd"
+    };
+
     function initFirebaseEngine() {
+      const isDisabled = localStorage.getItem('chpa_firebase_disabled') === 'true';
+      if (isDisabled) {
+        setFirebaseStatus(false);
+        return;
+      }
+
+      let config = DEFAULT_FIREBASE_CONFIG;
       const savedConfig = localStorage.getItem('chpa_firebase_config');
       if (savedConfig) {
         try {
-          const config = JSON.parse(savedConfig);
-          if (!firebase.apps.length) {
-            firebase.initializeApp(config);
-          }
-          db = firebase.firestore();
-
-          // Escuchar cambios en vivo desde la nube
-          db.collection('negocio_chpa').doc('datos_en_vivo').onSnapshot(doc => {
-            if (doc.exists) {
-              const remote = doc.data();
-              if (remote && remote.sales) {
-                isRemoteUpdate = true;
-                appData = remote;
-                localStorage.setItem('chpa_app_data', JSON.stringify(appData));
-                updateUI();
-                isRemoteUpdate = false;
-              }
-            } else {
-              // Primera vez: subir datos actuales a Firebase
-              db.collection('negocio_chpa').doc('datos_en_vivo').set(appData);
-            }
-            setFirebaseStatus(true);
-          }, err => {
-            console.error('Error escuchando Firestore:', err);
-            setFirebaseStatus(false);
-          });
-
-          document.getElementById('firebase-config-input').value = JSON.stringify(config, null, 2);
+          config = JSON.parse(savedConfig);
         } catch (e) {
-          console.error('Error parseando config de Firebase:', e);
-          setFirebaseStatus(false);
+          console.warn('Usando configuración predeterminada de Firebase');
         }
-      } else {
-        setFirebaseStatus(false);
+      }
+
+      try {
+        if (!firebase.apps.length) {
+          firebase.initializeApp(config);
+        }
+        db = firebase.firestore();
+
+        // Escuchar cambios en vivo desde la nube
+        db.collection('negocio_chpa').doc('datos_en_vivo').onSnapshot(doc => {
+          if (doc.exists) {
+            const remote = doc.data();
+            if (remote && remote.sales) {
+              isRemoteUpdate = true;
+              appData = remote;
+              ensureInventoryIntegrity();
+              localStorage.setItem('chpa_app_data', JSON.stringify(appData));
+              updateUI();
+              isRemoteUpdate = false;
+            }
+          } else {
+            // Primera vez: subir datos actuales a Firebase
+            db.collection('negocio_chpa').doc('datos_en_vivo').set(appData)
+              .catch(err => console.warn('Error inicializando documento en Firestore:', err));
+          }
+          setFirebaseStatus(true);
+        }, err => {
+          console.error('Error escuchando Firestore:', err);
+          setFirebaseStatus(false, err.message);
+        });
+
+        const configInput = document.getElementById('firebase-config-input');
+        if (configInput) {
+          configInput.value = JSON.stringify(config, null, 2);
+        }
+      } catch (e) {
+        console.error('Error inicializando Firebase:', e);
+        setFirebaseStatus(false, e.message);
       }
     }
 
-    function setFirebaseStatus(connected) {
+    function setFirebaseStatus(connected, errorMsg = '') {
       const badge = document.getElementById('firebase-status-badge');
       const text = document.getElementById('firebase-status-text');
       const cardBadge = document.getElementById('firebase-card-badge');
 
+      if (!badge || !text) return;
+
       if (connected) {
-        badge.className = "text-[10px] bg-emerald-900/60 text-emerald-300 font-semibold px-2.5 py-0.5 rounded-full border border-emerald-700 flex items-center gap-1";
-        text.innerText = "Nube Conectada (En Vivo)";
+        badge.className = "text-[10px] bg-emerald-900/60 text-emerald-300 font-semibold px-2.5 py-0.5 rounded-full border border-emerald-700 flex items-center gap-1 cursor-pointer";
+        badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span><span id="firebase-status-text">Nube Conectada (En Vivo)</span>`;
         if (cardBadge) {
           cardBadge.className = "text-xs bg-emerald-100 text-emerald-800 font-bold px-2.5 py-0.5 rounded-full";
           cardBadge.innerText = "🟢 Conectado & Sincronizado";
         }
       } else {
-        badge.className = "text-[10px] bg-amber-900/60 text-amber-300 font-semibold px-2.5 py-0.5 rounded-full border border-amber-700 flex items-center gap-1 hover:bg-amber-800 transition";
-        text.innerText = "Modo Local (Conectar Nube)";
+        badge.className = "text-[10px] bg-amber-900/60 text-amber-300 font-semibold px-2.5 py-0.5 rounded-full border border-amber-700 flex items-center gap-1 hover:bg-amber-800 transition cursor-pointer";
+        const isPermError = errorMsg && errorMsg.toLowerCase().includes('permission');
+        const msg = isPermError ? "Error Reglas Firebase" : "Modo Local (Sin Nube)";
+        badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span><span id="firebase-status-text">${msg}</span>`;
         if (cardBadge) {
           cardBadge.className = "text-xs bg-amber-100 text-amber-800 font-bold px-2.5 py-0.5 rounded-full";
-          cardBadge.innerText = "Pendiente Conectar";
+          cardBadge.innerText = isPermError ? "⚠️ Error de Permisos en Reglas" : "Modo Local / Desconectado";
         }
       }
     }
 
     function saveFirebaseCredentials() {
       let raw = document.getElementById('firebase-config-input').value.trim();
+      localStorage.removeItem('chpa_firebase_disabled');
       if (!raw) {
-        alert('Por favor pega la configuración que te da Firebase');
+        localStorage.removeItem('chpa_firebase_config');
+        alert('Configuración predeterminada activada.');
+        location.reload();
         return;
       }
 
       try {
-        // Limpiar si el usuario copió "const firebaseConfig = { ... };"
         if (raw.includes('{')) {
           raw = raw.substring(raw.indexOf('{'), raw.lastIndexOf('}') + 1);
         }
-        // Normalizar comillas si vinieron como objeto JS
         const normalized = raw
           .replace(/([a-zA-Z0-9_]+)\s*:/g, '"$1":')
           .replace(/'/g, '"');
@@ -657,10 +699,18 @@
       }
     }
 
+    function reconnectDefaultFirebase() {
+      localStorage.removeItem('chpa_firebase_disabled');
+      localStorage.removeItem('chpa_firebase_config');
+      alert('¡Reconectando con tu proyecto oficial de Firebase (cachapa-418ff)!');
+      location.reload();
+    }
+
     function disconnectFirebase() {
       if (confirm('¿Desconectar la sincronización de Firebase en este dispositivo?')) {
         localStorage.removeItem('chpa_firebase_config');
-        alert('Desconectado. Volviendo a modo local.');
+        localStorage.setItem('chpa_firebase_disabled', 'true');
+        alert('Desconectado. Ahora trabajará en modo local sin nube.');
         location.reload();
       }
     }
